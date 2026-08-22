@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" width="720" font-family="Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="720" height="520" fill="#ffffff"/>
+
+  <!-- ============ CC3200 (center) ============ -->
+  <text x="360" y="80" font-size="13" text-anchor="middle" fill="#000">CC3200</text>
+  <rect x="280" y="88" width="160" height="242" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+  <!-- left column pins -->
+  <text x="288" y="108" font-size="11" fill="#000">PIN_55</text>
+  <text x="288" y="132" font-size="11" fill="#000">PIN_57</text>
+  <text x="288" y="164" font-size="11" fill="#000">PIN_58</text>
+  <text x="288" y="196" font-size="11" fill="#000">3V3</text>
+  <text x="288" y="220" font-size="11" fill="#000">GND</text>
+  <text x="288" y="260" font-size="11" fill="#000">PIN_64</text>
+  <text x="288" y="284" font-size="11" fill="#000">PIN_02</text>
+  <!-- right column pins -->
+  <text x="432" y="108" font-size="11" text-anchor="end" fill="#000">3V3</text>
+  <text x="432" y="132" font-size="11" text-anchor="end" fill="#000">GND</text>
+  <text x="432" y="164" font-size="11" text-anchor="end" fill="#000">PIN_05</text>
+  <text x="432" y="188" font-size="11" text-anchor="end" fill="#000">PIN_07</text>
+  <text x="432" y="212" font-size="11" text-anchor="end" fill="#000">PIN_18</text>
+  <text x="432" y="236" font-size="11" text-anchor="end" fill="#000">PIN_45</text>
+  <text x="432" y="260" font-size="11" text-anchor="end" fill="#000">PIN_08</text>
+  <text x="432" y="292" font-size="11" text-anchor="end" fill="#000">PIN_06 (n.c.)</text>
+  <text x="432" y="316" font-size="11" text-anchor="end" fill="#000">PIN_50 (n.c.)</text>
+
+  <!-- ============ OLED (right) ============ -->
+  <text x="640" y="88" font-size="12" text-anchor="middle" fill="#000">OLED (SSD1351)</text>
+  <rect x="580" y="96" width="120" height="184" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+  <text x="588" y="116" font-size="11" fill="#000">VCC</text>
+  <text x="588" y="140" font-size="11" fill="#000">GND</text>
+  <text x="588" y="172" font-size="11" fill="#000">SCLK</text>
+  <text x="588" y="196" font-size="11" fill="#000">DIN</text>
+  <text x="588" y="220" font-size="11" fill="#000">CS</text>
+  <text x="588" y="244" font-size="11" fill="#000">DC</text>
+  <text x="588" y="268" font-size="11" fill="#000">RST</text>
+
+  <!-- CC3200 -> OLED wires -->
+  <polyline points="440,104 468,104 468,112 580,112" fill="none" stroke="#000" stroke-width="1.2"/>
+  <polyline points="440,128 476,128 476,136 580,136" fill="none" stroke="#000" stroke-width="1.2"/>
+  <polyline points="440,160 484,160 484,168 580,168" fill="none" stroke="#000" stroke-width="1.2"/>
+  <polyline points="440,184 492,184 492,192 580,192" fill="none" stroke="#000" stroke-width="1.2"/>
+  <polyline points="440,208 500,208 500,216 580,216" fill="none" stroke="#000" stroke-width="1.2"/>
+  <polyline points="440,232 508,232 508,240 580,240" fill="none" stroke="#000" stroke-width="1.2"/>
+  <polyline points="440,256 516,256 516,264 580,264" fill="none" stroke="#000" stroke-width="1.2"/>
+  <text x="524" y="108" font-size="10" text-anchor="middle" fill="#000">3V3</text>
+  <text x="528" y="132" font-size="10" text-anchor="middle" fill="#000">GND</text>
+  <text x="532" y="164" font-size="10" text-anchor="middle" fill="#000">GSPI_CLK</text>
+  <text x="536" y="188" font-size="10" text-anchor="middle" fill="#000">GSPI_MOSI</text>
+  <text x="540" y="212" font-size="10" text-anchor="middle" fill="#000">GPIO28</text>
+  <text x="544" y="236" font-size="10" text-anchor="middle" fill="#000">GPIO31</text>
+  <text x="548" y="260" font-size="10" text-anchor="middle" fill="#000">GPIO17</text>
+
+  <!-- ============ UART0 console (upper left) ============ -->
+  <text x="100" y="80" font-size="12" text-anchor="middle" fill="#000">UART0 (USB)</text>
+  <rect x="40" y="88" width="120" height="52" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+  <text x="152" y="108" font-size="11" text-anchor="end" fill="#000">TX</text>
+  <text x="152" y="132" font-size="11" text-anchor="end" fill="#000">RX</text>
+  <line x1="160" y1="104" x2="280" y2="104" stroke="#000" stroke-width="1.2"/>
+  <line x1="160" y1="128" x2="280" y2="128" stroke="#000" stroke-width="1.2"/>
+  <text x="220" y="99" font-size="10" text-anchor="middle" fill="#000">UART0_TX</text>
+  <text x="220" y="123" font-size="10" text-anchor="middle" fill="#000">UART0_RX</text>
+
+  <!-- ============ IR receiver (lower left) ============ -->
+  <circle cx="110" cy="333" r="26" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+  <text x="110" y="394" font-size="12" text-anchor="middle" fill="#000">IR RECEIVER (38 kHz)</text>
+  <!-- incoming light arrows -->
+  <line x1="55" y1="290" x2="78" y2="308" stroke="#000" stroke-width="1"/>
+  <polygon points="80,310 70,306 75,300" fill="#000"/>
+  <line x1="48" y1="305" x2="71" y2="322" stroke="#000" stroke-width="1"/>
+  <polygon points="73,324 63,320 68,314" fill="#000"/>
+  <!-- lead labels -->
+  <text x="142" y="308" font-size="10" fill="#000">OUT</text>
+  <text x="140" y="329" font-size="10" fill="#000">VCC</text>
+  <text x="142" y="366" font-size="10" fill="#000">GND</text>
+  <!-- OUT -> PIN_58 -->
+  <polyline points="126,312 225,312 225,160 280,160" fill="none" stroke="#000" stroke-width="1.2"/>
+  <text x="252" y="155" font-size="10" text-anchor="middle" fill="#000">GPIO3</text>
+  <!-- VCC through series resistor -> 3V3 -->
+  <line x1="136" y1="333" x2="175" y2="333" stroke="#000" stroke-width="1.2"/>
+  <polyline points="175,333 178,327 184,339 190,327 196,339 202,327 205,333" fill="none" stroke="#000" stroke-width="1.2"/>
+  <text x="190" y="322" font-size="10" text-anchor="middle" fill="#000">R</text>
+  <polyline points="205,333 248,333 248,192 280,192" fill="none" stroke="#000" stroke-width="1.2"/>
+  <text x="264" y="188" font-size="10" text-anchor="middle" fill="#000">3V3</text>
+  <!-- decoupling cap from VCC node to GND -->
+  <circle cx="160" cy="333" r="2.5" fill="#000"/>
+  <line x1="160" y1="333" x2="160" y2="341" stroke="#000" stroke-width="1.2"/>
+  <line x1="152" y1="341" x2="168" y2="341" stroke="#000" stroke-width="1.5"/>
+  <line x1="152" y1="346" x2="168" y2="346" stroke="#000" stroke-width="1.5"/>
+  <line x1="160" y1="346" x2="160" y2="354" stroke="#000" stroke-width="1.2"/>
+  <circle cx="160" cy="354" r="2.5" fill="#000"/>
+  <text x="173" y="346" font-size="10" fill="#000">C</text>
+  <!-- GND return -->
+  <polyline points="126,354 256,354 256,216 280,216" fill="none" stroke="#000" stroke-width="1.2"/>
+  <text x="268" y="212" font-size="10" text-anchor="middle" fill="#000">GND</text>
+
+  <!-- ============ On-board LEDs (bottom) ============ -->
+  <text x="375" y="422" font-size="12" text-anchor="middle" fill="#000">LEDs (on-board)</text>
+  <rect x="310" y="430" width="130" height="64" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+  <text x="318" y="456" font-size="11" fill="#000">GREEN (GPIO11)</text>
+  <text x="318" y="480" font-size="11" fill="#000">RED (GPIO9)</text>
+  <polyline points="280,280 272,280 272,452 310,452" fill="none" stroke="#000" stroke-width="1.2"/>
+  <polyline points="280,256 264,256 264,476 310,476" fill="none" stroke="#000" stroke-width="1.2"/>
+</svg>
