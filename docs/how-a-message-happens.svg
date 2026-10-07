@@ -1,0 +1,245 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1864" width="1000" height="1864" role="img" aria-label="How a message happens in IR Signal AWS, from main.c: a remote button press reaches PIN_58; GPIOA0IntHandler fires on both edges, restarting SysTick on each falling edge and timing each low mark on the rising edge. A first mark of 2000 µs or less aborts the frame; otherwise the next 12 marks become 12 bits (1 if the mark is at most 1000 µs), and the 13th rising edge sets pin_out_intflag. The main loop clears the flag, ignores frames that arrive less than 200 ms of global_time after the last accepted one, wipes the message row if the previous key was send, then either commits the pending letter into msg and moves x by 6 px, or, for the same button within 1500 ms or when the previous key was caps, delete or send, only increments curr_cycle. It records prev_data and the press time, then switches on the code: caps toggles caps_lock and draws nothing; letter groups, space and delete set curr_letter and drawChar paints it at row 64 over 100 kHz SPI; send (0xD6F) wraps msg in a shadow document with jsonify and http_post sends it as a POST to /things/LAB4_AWS/shadow on the TLS 1.2 socket opened at boot, setting state.desired.default of the AWS IoT device shadow; afterwards message_sent becomes true and curr_cycle -1. Every pass ends by returning to polling.">
+  <style>
+    .bg{fill:#ffffff}
+    .title{fill:#1f2328;font:600 22px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .sub{fill:#59636e;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .lbl{fill:#1f2328;font:600 14px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .note{fill:#59636e;font:12px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .glbl{fill:#59636e;font:600 12px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;letter-spacing:.06em}
+    .elbl{fill:#59636e;font:11px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .edge{stroke:#818b98;stroke-width:1.6;fill:none}
+    .edge-dash{stroke:#818b98;stroke-width:1.6;fill:none;stroke-dasharray:6 4}
+    .arrow{fill:#818b98}
+    .group{fill:none;stroke:#d1d9e0;stroke-width:1.2;stroke-dasharray:4 4}
+    .b-blue{fill:#ddf4ff;stroke:#54aeff;stroke-width:1.5}
+    .b-green{fill:#dafbe1;stroke:#4ac26b;stroke-width:1.5}
+    .b-purple{fill:#fbefff;stroke:#c297ff;stroke-width:1.5}
+    .b-orange{fill:#fff1e5;stroke:#fb8f44;stroke-width:1.5}
+    .b-gray{fill:#f6f8fa;stroke:#d1d9e0;stroke-width:1.5}
+    .b-red{fill:#ffebe9;stroke:#ff8182;stroke-width:1.5}
+    .b-planned{fill:none;stroke:#818b98;stroke-width:1.4;stroke-dasharray:5 4}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .wire{stroke:#59636e;stroke-width:1.4;fill:none}
+    .dot{fill:#59636e}
+    @media (prefers-color-scheme: dark){
+      .bg{fill:#0d1117}
+      .title,.lbl{fill:#e6edf3}
+      .sub,.note,.glbl,.elbl{fill:#9198a1}
+      .edge,.edge-dash{stroke:#9198a1}
+      .arrow{fill:#9198a1}
+      .group{stroke:#3d444d}
+      .b-blue{fill:#0c2d6b;stroke:#4493f8}
+      .b-green{fill:#0f3b1e;stroke:#3fb950}
+      .b-purple{fill:#2e1a4f;stroke:#ab7df8}
+      .b-orange{fill:#3d1f0a;stroke:#f0883e}
+      .b-gray{fill:#151b23;stroke:#3d444d}
+      .b-red{fill:#3c1618;stroke:#f85149}
+      .b-planned{stroke:#9198a1}
+      .wire{stroke:#9198a1}
+      .dot{fill:#9198a1}
+    }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="arrow" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1000" height="1864" rx="12"/>
+  <text class="title" x="32" y="48">IR Signal AWS — how a message happens</text>
+  <text class="sub" x="32" y="74">main.c end to end: IR edges become a 12-bit code, multi-tap turns codes into text, send POSTs it to AWS.</text>
+
+  <!-- ===== legend (top right) ===== -->
+  <text class="glbl" x="548" y="106">LEGEND</text>
+  <rect class="b-orange" x="548" y="116" width="26" height="14" rx="4"/>
+  <text class="note" x="584" y="127">IR input (hardware)</text>
+  <rect class="b-blue" x="700" y="116" width="26" height="14" rx="4"/>
+  <text class="note" x="736" y="127">firmware step</text>
+  <rect class="b-green" x="846" y="116" width="26" height="14" rx="4"/>
+  <text class="note" x="882" y="127">OLED drawing</text>
+  <rect class="b-red" x="548" y="138" width="26" height="14" rx="4"/>
+  <text class="note" x="584" y="149">frame dropped</text>
+  <rect class="b-purple" x="700" y="138" width="26" height="14" rx="4"/>
+  <text class="note" x="736" y="149">send path / AWS</text>
+  <polygon class="b-gray" points="859,138 873,145 859,152 845,145"/>
+  <text class="note" x="882" y="149">decision</text>
+  <path class="edge" d="M548,166 H574" marker-end="url(#ah)"/>
+  <text class="note" x="584" y="170">control flow</text>
+  <path class="edge-dash" d="M698,166 H730" marker-start="url(#ah)" marker-end="url(#ah)"/>
+  <text class="note" x="736" y="170">timer access</text>
+
+  <!-- ===== the press ===== -->
+  <rect class="b-orange" x="150" y="96" width="360" height="72" rx="10"/>
+  <text class="lbl" x="330" y="119" text-anchor="middle">remote button press</text>
+  <text class="note" x="330" y="137" text-anchor="middle">demodulated IR on PIN_58 (GPIOA0, bit 0x8)</text>
+  <text class="note" x="330" y="154" text-anchor="middle">12-bit code per button, decoded by hand</text>
+  <path class="edge" d="M330,168 V214" marker-end="url(#ah)"/>
+
+  <!-- ===== interrupts ===== -->
+  <rect class="group" x="20" y="186" width="960" height="398" rx="12"/>
+  <text class="glbl" x="36" y="206">INTERRUPTS — MICROSECOND SCALE</text>
+
+  <rect class="b-blue" x="150" y="218" width="360" height="72" rx="10"/>
+  <text class="lbl" x="330" y="241" text-anchor="middle">GPIOA0IntHandler — both edges</text>
+  <text class="note" x="330" y="259" text-anchor="middle">falling edge: restart SysTick, arm a frame if idle</text>
+  <text class="note" x="330" y="276" text-anchor="middle">rising edge: mark width in µs from the SysTick count</text>
+
+  <rect class="b-blue" x="600" y="218" width="360" height="72" rx="10"/>
+  <text class="lbl" x="780" y="241" text-anchor="middle">SysTick timer — 40 ms period</text>
+  <text class="note" x="780" y="259" text-anchor="middle">3,200,000 ticks at 80 MHz</text>
+  <text class="note" x="780" y="276" text-anchor="middle">rollover ISR: global_time += 40 (coarse ms clock)</text>
+  <path class="edge-dash" d="M514,268 H596" marker-start="url(#ah)" marker-end="url(#ah)"/>
+  <text class="elbl" x="555" y="242" text-anchor="middle">fall: restart</text>
+  <text class="elbl" x="555" y="256" text-anchor="middle">rise: read</text>
+
+  <path class="edge" d="M330,290 V314" marker-end="url(#ah)"/>
+  <polygon class="b-gray" points="330,318 480,350 330,382 180,350"/>
+  <text class="lbl" x="330" y="355" text-anchor="middle">first mark &gt; 2000 µs?</text>
+  <path class="edge" d="M480,350 H596" marker-end="url(#ah)"/>
+  <text class="elbl" x="538" y="342" text-anchor="middle">no — noise</text>
+  <rect class="b-red" x="600" y="314" width="360" height="72" rx="10"/>
+  <text class="lbl" x="780" y="337" text-anchor="middle">abort the frame</text>
+  <text class="note" x="780" y="355" text-anchor="middle">reading_data = false, edge_counter = 0</text>
+  <text class="note" x="780" y="372" text-anchor="middle">the next falling edge arms a new frame</text>
+
+  <path class="edge" d="M330,382 V410" marker-end="url(#ah)"/>
+  <text class="elbl" x="340" y="400">yes</text>
+  <rect class="b-blue" x="150" y="414" width="360" height="72" rx="10"/>
+  <text class="lbl" x="330" y="437" text-anchor="middle">next 12 marks → 12 data bits</text>
+  <text class="note" x="330" y="455" text-anchor="middle">data &lt;&lt;= 1, then | 1 if the mark ≤ 1000 µs, else 0</text>
+  <text class="note" x="330" y="472" text-anchor="middle">only the low marks are timed, never the gaps</text>
+  <path class="edge" d="M330,486 V506" marker-end="url(#ah)"/>
+  <rect class="b-blue" x="150" y="510" width="360" height="56" rx="10"/>
+  <text class="lbl" x="330" y="533" text-anchor="middle">13th rising edge — frame done</text>
+  <text class="note" x="330" y="551" text-anchor="middle">pin_out_intflag = 1 · data holds the 12-bit code</text>
+
+  <!-- ===== handoff ===== -->
+  <path class="edge" d="M330,566 V646" marker-end="url(#ah)"/>
+  <text class="elbl" x="340" y="605">pin_out_intflag + data (shared globals)</text>
+
+  <!-- ===== main loop ===== -->
+  <rect class="group" x="20" y="618" width="960" height="1222" rx="12"/>
+  <text class="glbl" x="36" y="638">MAIN LOOP — MILLISECOND SCALE</text>
+
+  <rect class="b-blue" x="150" y="650" width="360" height="56" rx="10"/>
+  <text class="lbl" x="330" y="673" text-anchor="middle">main loop sees pin_out_intflag</text>
+  <text class="note" x="330" y="691" text-anchor="middle">clears it; data holds the code</text>
+
+  <path class="edge" d="M330,706 V728" marker-end="url(#ah)"/>
+  <polygon class="b-gray" points="330,732 480,764 330,796 180,764"/>
+  <text class="lbl" x="330" y="769" text-anchor="middle">≥ 200 ms since last accepted?</text>
+  <path class="edge" d="M480,764 H596" marker-end="url(#ah)"/>
+  <text class="elbl" x="538" y="756" text-anchor="middle">no</text>
+  <rect class="b-red" x="600" y="736" width="360" height="56" rx="10"/>
+  <text class="lbl" x="780" y="759" text-anchor="middle">ignored — IR auto-repeat</text>
+  <text class="note" x="780" y="777" text-anchor="middle">frame dropped; 200 ms counted on global_time</text>
+  <path class="edge" d="M780,736 V678 H514" marker-end="url(#ah)"/>
+  <text class="elbl" x="790" y="712">keep polling</text>
+
+  <path class="edge" d="M330,796 V820" marker-end="url(#ah)"/>
+  <text class="elbl" x="340" y="812">yes</text>
+  <polygon class="b-gray" points="330,824 450,856 330,888 210,856"/>
+  <text class="lbl" x="330" y="861" text-anchor="middle">message_sent?</text>
+  <path class="edge" d="M330,888 V912" marker-end="url(#ah)"/>
+  <text class="elbl" x="340" y="904">yes — the previous key was send</text>
+  <rect class="b-green" x="150" y="916" width="360" height="72" rx="10"/>
+  <text class="lbl" x="330" y="939" text-anchor="middle">wipe the message row</text>
+  <text class="note" x="330" y="957" text-anchor="middle">fillRect(0, 64, 128, 9) in black · x = 6</text>
+  <text class="note" x="330" y="974" text-anchor="middle">msg = "" · message_sent = false</text>
+  <path class="edge" d="M210,856 H100 V1046 H176" marker-end="url(#ah)"/>
+  <text class="elbl" x="155" y="848" text-anchor="middle">no</text>
+
+  <path class="edge" d="M330,988 V1010" marker-end="url(#ah)"/>
+  <polygon class="b-gray" points="330,1014 480,1046 330,1078 180,1046"/>
+  <text class="lbl" x="330" y="1051" text-anchor="middle">same button within 1500 ms?</text>
+  <path class="edge" d="M480,1046 H780 V1106" marker-end="url(#ah)"/>
+  <text class="elbl" x="630" y="1038" text-anchor="middle">yes — multi-tap cycling</text>
+  <path class="edge" d="M330,1078 V1102" marker-end="url(#ah)"/>
+  <text class="elbl" x="340" y="1094">no</text>
+  <polygon class="b-gray" points="330,1106 500,1148 330,1190 160,1148"/>
+  <text class="lbl" x="330" y="1143" text-anchor="middle">previous key was</text>
+  <text class="lbl" x="330" y="1161" text-anchor="middle">caps, delete or send?</text>
+  <path class="edge" d="M500,1148 H596" marker-end="url(#ah)"/>
+  <text class="elbl" x="548" y="1140" text-anchor="middle">yes</text>
+  <rect class="b-blue" x="600" y="1110" width="360" height="72" rx="10"/>
+  <text class="lbl" x="780" y="1133" text-anchor="middle">no commit: curr_cycle++ (a → b → c)</text>
+  <text class="note" x="780" y="1151" text-anchor="middle">x unchanged, so a repeat tap repaints the same cell</text>
+  <text class="note" x="780" y="1168" text-anchor="middle">send sets −1 and caps does −− to offset this ++</text>
+
+  <path class="edge" d="M330,1190 V1214" marker-end="url(#ah)"/>
+  <text class="elbl" x="340" y="1206">no</text>
+  <rect class="b-blue" x="150" y="1218" width="360" height="72" rx="10"/>
+  <text class="lbl" x="330" y="1241" text-anchor="middle">commit the pending letter</text>
+  <text class="note" x="330" y="1259" text-anchor="middle">msg[len] = curr_letter, x += 6 px</text>
+  <text class="note" x="330" y="1276" text-anchor="middle">curr_cycle = 0: the new key starts at its 1st letter</text>
+
+  <path class="edge" d="M330,1290 V1314" marker-end="url(#ah)"/>
+  <path class="edge" d="M780,1182 V1354 H514" marker-end="url(#ah)"/>
+  <rect class="b-blue" x="150" y="1318" width="360" height="72" rx="10"/>
+  <text class="lbl" x="330" y="1341" text-anchor="middle">remember this key</text>
+  <text class="note" x="330" y="1359" text-anchor="middle">prev_data = data</text>
+  <text class="note" x="330" y="1376" text-anchor="middle">last_time_button_pressed = global_time</text>
+
+  <path class="edge" d="M330,1390 V1412" marker-end="url(#ah)"/>
+  <polygon class="b-gray" points="330,1416 440,1448 330,1480 220,1448"/>
+  <text class="lbl" x="330" y="1453" text-anchor="middle">switch (data)</text>
+
+  <!-- send branch -->
+  <path class="edge" d="M440,1448 H656" marker-end="url(#ah)"/>
+  <text class="elbl" x="548" y="1440" text-anchor="middle">0xD6F — send</text>
+  <rect class="b-purple" x="660" y="1412" width="300" height="72" rx="10"/>
+  <text class="lbl" x="810" y="1435" text-anchor="middle">jsonify(msg) → shadow document</text>
+  <text class="note" x="810" y="1453" text-anchor="middle">{"state": {"desired": {"default": "&lt;msg&gt;"}}}</text>
+  <text class="note" x="810" y="1470" text-anchor="middle">256-byte buffer, logged on UART</text>
+  <path class="edge" d="M810,1484 V1512" marker-end="url(#ah)"/>
+  <rect class="b-purple" x="660" y="1516" width="300" height="72" rx="10"/>
+  <text class="lbl" x="810" y="1539" text-anchor="middle">http_post(socket, json)</text>
+  <text class="note mono" x="810" y="1557" text-anchor="middle">POST /things/LAB4_AWS/shadow</text>
+  <text class="note" x="810" y="1574" text-anchor="middle">on the TLS 1.2 socket opened once at boot</text>
+  <path class="edge" d="M810,1588 V1626" marker-end="url(#ah)"/>
+  <text class="elbl" x="820" y="1611">HTTPS · port 8443</text>
+  <path class="b-purple" d="M660,1642 A150,12 0 0,1 960,1642 V1710 A150,12 0 0,1 660,1710 Z"/>
+  <path class="b-purple" d="M660,1642 A150,12 0 0,0 960,1642"/>
+  <text class="lbl" x="810" y="1678" text-anchor="middle">AWS IoT device shadow</text>
+  <text class="note" x="810" y="1696" text-anchor="middle">state.desired.default = msg</text>
+  <path class="edge" d="M810,1722 V1750" marker-end="url(#ah)"/>
+  <text class="elbl" x="820" y="1740">reply → sl_Recv → UART</text>
+  <rect class="b-blue" x="660" y="1754" width="300" height="72" rx="10"/>
+  <text class="lbl" x="810" y="1777" text-anchor="middle">after the send</text>
+  <text class="note" x="810" y="1795" text-anchor="middle">UtilsDelay(80000), then</text>
+  <text class="note" x="810" y="1812" text-anchor="middle">message_sent = true · curr_cycle = −1</text>
+
+  <!-- fan-out to the drawing keys -->
+  <path class="edge" d="M330,1480 V1512" marker-end="url(#ah)"/>
+  <path class="edge" d="M330,1496 H123 V1512" marker-end="url(#ah)"/>
+  <path class="edge" d="M330,1496 H552 V1512" marker-end="url(#ah)"/>
+  <rect class="b-blue" x="50" y="1516" width="146" height="72" rx="10"/>
+  <text class="lbl" x="123" y="1539" text-anchor="middle">caps · 0xFEF</text>
+  <text class="note" x="123" y="1557" text-anchor="middle">toggle caps_lock</text>
+  <text class="note" x="123" y="1574" text-anchor="middle">curr_cycle−−, no draw</text>
+  <rect class="b-blue" x="208" y="1516" width="244" height="72" rx="10"/>
+  <text class="lbl" x="330" y="1539" text-anchor="middle">letter group or space</text>
+  <text class="note" x="330" y="1557" text-anchor="middle">base letter + curr_cycle % 3 or 4</text>
+  <text class="note" x="330" y="1574" text-anchor="middle">− 32 if caps_lock · 0x6EF = space</text>
+  <rect class="b-blue" x="464" y="1516" width="176" height="72" rx="10"/>
+  <text class="lbl" x="552" y="1539" text-anchor="middle">delete · 0x22F</text>
+  <text class="note" x="552" y="1557" text-anchor="middle">drop msg's last char</text>
+  <text class="note" x="552" y="1574" text-anchor="middle">x −= 6 · draws a space</text>
+
+  <path class="edge" d="M330,1588 V1622" marker-end="url(#ah)"/>
+  <path class="edge" d="M552,1588 V1622" marker-end="url(#ah)"/>
+  <rect class="b-green" x="208" y="1626" width="432" height="72" rx="10"/>
+  <text class="lbl" x="424" y="1649" text-anchor="middle">drawChar(x, 64, curr_letter)</text>
+  <text class="note" x="424" y="1667" text-anchor="middle">5×7 glyph in a 6×8 cell, white on black</text>
+  <text class="note" x="424" y="1684" text-anchor="middle">SSD1351 128×128 over 100 kHz SPI</text>
+
+  <!-- ===== end of pass, back to polling ===== -->
+  <path class="edge" d="M424,1698 V1758" marker-end="url(#ah)"/>
+  <path class="edge" d="M123,1588 V1758" marker-end="url(#ah)"/>
+  <path class="edge" d="M660,1790 H644" marker-end="url(#ah)"/>
+  <rect class="b-gray" x="50" y="1762" width="590" height="56" rx="10"/>
+  <text class="lbl" x="345" y="1785" text-anchor="middle">end of this pass</text>
+  <text class="note" x="345" y="1803" text-anchor="middle">back to polling pin_out_intflag for the next frame</text>
+  <path class="edge" d="M50,1790 H34 V678 H146" marker-end="url(#ah)"/>
+  <text class="elbl" x="92" y="670" text-anchor="middle">next frame</text>
+</svg>

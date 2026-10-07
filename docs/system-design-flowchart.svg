@@ -1,0 +1,212 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1600" width="1000" height="1600" role="img" aria-label="IR Signal AWS end-to-end flowchart: an IR remote and 38 kHz receiver drive a both-edge GPIO interrupt on PIN_58 that resets the SysTick counter on each falling edge and reads it on each rising edge, turning 13 marks (a start mark over 2000 microseconds plus 12 bits) into a 12-bit code and setting pin_out_intflag; SysTickHandler adds 40 to global_time whenever the 40 ms countdown runs out. The polled main loop drops frames until global_time has advanced 200 since the last accepted one, wipes the row after a send, runs the commit-on-next-press multi-tap engine and the key map, and draws each character through Adafruit_GFX drawChar, the SSD1351 driver and 100 kHz GSPI onto the 128x128 OLED. On 0xD6F it wraps msg with jsonify and http_post sends it on the TLS socket that Wi-Fi join, set_time and tls_connect opened once at boot, to the AWS IoT device shadow of thing LAB4_AWS; http_get is defined but never called">
+  <style>
+    .bg{fill:#ffffff}
+    .title{fill:#1f2328;font:600 22px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .sub{fill:#59636e;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .lbl{fill:#1f2328;font:600 14px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .note{fill:#59636e;font:12px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .glbl{fill:#59636e;font:600 12px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;letter-spacing:.06em}
+    .elbl{fill:#59636e;font:11px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .edge{stroke:#818b98;stroke-width:1.6;fill:none}
+    .edge-dash{stroke:#818b98;stroke-width:1.6;fill:none;stroke-dasharray:6 4}
+    .arrow{fill:#818b98}
+    .group{fill:none;stroke:#d1d9e0;stroke-width:1.2;stroke-dasharray:4 4}
+    .b-blue{fill:#ddf4ff;stroke:#54aeff;stroke-width:1.5}
+    .b-green{fill:#dafbe1;stroke:#4ac26b;stroke-width:1.5}
+    .b-purple{fill:#fbefff;stroke:#c297ff;stroke-width:1.5}
+    .b-orange{fill:#fff1e5;stroke:#fb8f44;stroke-width:1.5}
+    .b-gray{fill:#f6f8fa;stroke:#d1d9e0;stroke-width:1.5}
+    .b-planned{fill:none;stroke:#818b98;stroke-width:1.4;stroke-dasharray:5 4}
+    @media (prefers-color-scheme: dark){
+      .bg{fill:#0d1117}
+      .title,.lbl{fill:#e6edf3}
+      .sub,.note,.glbl,.elbl{fill:#9198a1}
+      .edge,.edge-dash{stroke:#9198a1}
+      .arrow{fill:#9198a1}
+      .group{stroke:#3d444d}
+      .b-blue{fill:#0c2d6b;stroke:#4493f8}
+      .b-green{fill:#0f3b1e;stroke:#3fb950}
+      .b-purple{fill:#2e1a4f;stroke:#ab7df8}
+      .b-orange{fill:#3d1f0a;stroke:#f0883e}
+      .b-gray{fill:#151b23;stroke:#3d444d}
+      .b-planned{stroke:#9198a1}
+    }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="arrow" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1000" height="1600" rx="12"/>
+  <text class="title" x="32" y="48">IR Signal AWS — end-to-end flowchart</text>
+  <text class="sub" x="32" y="74">A button press is timed in interrupts, typed in the main loop, drawn on the OLED, and POSTed to AWS on send.</text>
+
+  <!-- ===== Hardware input ===== -->
+  <rect class="group" x="24" y="92" width="622" height="112" rx="12"/>
+  <text class="glbl" x="40" y="114">HARDWARE INPUT</text>
+  <rect class="b-orange" x="40" y="124" width="250" height="64" rx="10"/>
+  <text class="lbl" x="165" y="151" text-anchor="middle">IR remote</text>
+  <text class="note" x="165" y="170" text-anchor="middle">12-bit code per button, hand-decoded</text>
+  <rect class="b-orange" x="370" y="124" width="240" height="64" rx="10"/>
+  <text class="lbl" x="490" y="151" text-anchor="middle">IR receiver (38 kHz)</text>
+  <text class="note" x="490" y="170" text-anchor="middle">idle high, each mark pulls it low</text>
+  <path class="edge" d="M290,156 H366" marker-end="url(#ah)"/>
+  <text class="elbl" x="330" y="148" text-anchor="middle">38 kHz IR</text>
+  <path class="edge" d="M490,188 V258" marker-end="url(#ah)"/>
+  <text class="elbl" x="500" y="220">PIN_58 / GPIO3 · both edges</text>
+
+  <!-- ===== Interrupt layer ===== -->
+  <rect class="group" x="24" y="228" width="952" height="232" rx="12"/>
+  <text class="glbl" x="40" y="250">INTERRUPT LAYER — MICROSECOND SCALE</text>
+  <rect class="b-green" x="340" y="262" width="300" height="76" rx="10"/>
+  <text class="lbl" x="490" y="286" text-anchor="middle">GPIOA0IntHandler</text>
+  <text class="note" x="490" y="305" text-anchor="middle">falling: reset SysTick; arm frame if idle</text>
+  <text class="note" x="490" y="324" text-anchor="middle">rising: mark width in µs (stopwatch)</text>
+  <rect class="b-green" x="340" y="368" width="300" height="76" rx="10"/>
+  <text class="lbl" x="490" y="392" text-anchor="middle">frame assembly (same ISR)</text>
+  <text class="note" x="490" y="411" text-anchor="middle">start mark &gt; 2000 µs, else abort</text>
+  <text class="note" x="490" y="430" text-anchor="middle">12 bits: mark ≤ 1000 µs → 1, else 0</text>
+  <path class="edge" d="M490,338 V364" marker-end="url(#ah)"/>
+  <rect class="b-green" x="724" y="262" width="240" height="76" rx="10"/>
+  <text class="lbl" x="844" y="286" text-anchor="middle">SysTick + SysTickHandler</text>
+  <text class="note" x="844" y="305" text-anchor="middle">3,200,000-tick countdown = 40 ms</text>
+  <text class="note" x="844" y="324" text-anchor="middle">at zero: global_time += 40</text>
+  <path class="edge-dash" d="M640,282 H720" marker-end="url(#ah)"/>
+  <text class="elbl" x="682" y="274" text-anchor="middle">falling: reset</text>
+  <path class="edge-dash" d="M724,318 H644" marker-end="url(#ah)"/>
+  <text class="elbl" x="682" y="334" text-anchor="middle">rising: read</text>
+
+  <!-- ===== ISR -> main loop handoff ===== -->
+  <path class="edge-dash" d="M490,444 V528" marker-end="url(#ah)"/>
+  <text class="elbl" x="500" y="480">13th mark: pin_out_intflag = 1, data = 12-bit code</text>
+  <path class="edge-dash" d="M844,338 V570 H644" marker-end="url(#ah)"/>
+  <path class="edge-dash" d="M844,570 V778 H644" marker-end="url(#ah)"/>
+  <text class="elbl" x="744" y="562" text-anchor="middle">global_time</text>
+  <text class="elbl" x="744" y="770" text-anchor="middle">global_time</text>
+
+  <!-- ===== Main loop ===== -->
+  <rect class="group" x="24" y="492" width="622" height="444" rx="12"/>
+  <text class="glbl" x="40" y="514">MAIN LOOP — HUMAN SCALE (main.c)</text>
+  <rect class="b-blue" x="340" y="532" width="300" height="76" rx="10"/>
+  <text class="lbl" x="490" y="556" text-anchor="middle">auto-repeat gate</text>
+  <text class="note" x="490" y="575" text-anchor="middle">global_time − prev_detection ≥ 200</text>
+  <text class="note" x="490" y="594" text-anchor="middle">else the frame is ignored</text>
+  <rect class="b-blue" x="340" y="636" width="300" height="76" rx="10"/>
+  <text class="lbl" x="490" y="660" text-anchor="middle">post-send reset</text>
+  <text class="note" x="490" y="679" text-anchor="middle">first accepted press after a send:</text>
+  <text class="note" x="490" y="698" text-anchor="middle">row wiped, x = 6, msg emptied</text>
+  <rect class="b-blue" x="340" y="740" width="300" height="76" rx="10"/>
+  <text class="lbl" x="490" y="764" text-anchor="middle">multi-tap engine</text>
+  <text class="note" x="490" y="783" text-anchor="middle">other key, or gap ≥ 1500: commit pending</text>
+  <text class="note" x="490" y="802" text-anchor="middle">letter to msg[50]; same key: cycle</text>
+  <text class="elbl" x="328" y="796" text-anchor="end">after caps, delete or send:</text>
+  <text class="elbl" x="328" y="811" text-anchor="end">no commit, curr_cycle++</text>
+  <rect class="b-blue" x="340" y="844" width="300" height="76" rx="10"/>
+  <text class="lbl" x="490" y="868" text-anchor="middle">switch (data) — key map</text>
+  <text class="note" x="490" y="887" text-anchor="middle">8 letter groups abc … wxyz · 0x6EF space</text>
+  <text class="note" x="490" y="906" text-anchor="middle">0xFEF caps · 0x22F delete · 0xD6F send</text>
+  <path class="edge" d="M490,608 V632" marker-end="url(#ah)"/>
+  <path class="edge" d="M490,712 V736" marker-end="url(#ah)"/>
+  <path class="edge" d="M490,816 V840" marker-end="url(#ah)"/>
+
+  <!-- ===== Main loop -> display ===== -->
+  <path class="edge" d="M340,674 H70 V1096" marker-end="url(#ah)"/>
+  <text class="elbl" x="205" y="666" text-anchor="middle">fillRect(0, 64, 128, 9)</text>
+  <path class="edge" d="M340,882 H232 V992" marker-end="url(#ah)"/>
+  <text class="elbl" x="222" y="906" text-anchor="end">drawChar(x, 64, letter)</text>
+  <text class="elbl" x="222" y="920" text-anchor="end">on every key but caps, send</text>
+
+  <!-- ===== Main loop -> cloud ===== -->
+  <path class="edge" d="M632,920 V1124" marker-end="url(#ah)"/>
+  <text class="elbl" x="642" y="952">0xD6F send → jsonify(msg)</text>
+
+  <!-- ===== Display path ===== -->
+  <rect class="group" x="24" y="960" width="346" height="468" rx="12"/>
+  <text class="glbl" x="40" y="1414">DISPLAY PATH — WRITE-ONLY, NO FRAMEBUFFER</text>
+  <rect class="b-gray" x="110" y="996" width="244" height="76" rx="10"/>
+  <text class="lbl" x="232" y="1020" text-anchor="middle">Adafruit_GFX — drawChar</text>
+  <text class="note" x="232" y="1039" text-anchor="middle">5×7 glyph in a 6×8 cell</text>
+  <text class="note" x="232" y="1058" text-anchor="middle">paints background pixels too</text>
+  <rect class="b-gray" x="40" y="1100" width="314" height="76" rx="10"/>
+  <text class="lbl" x="197" y="1124" text-anchor="middle">Adafruit_OLED — SSD1351 driver</text>
+  <text class="note" x="197" y="1143" text-anchor="middle">writeCommand / writeData · fillRect</text>
+  <text class="note" x="197" y="1162" text-anchor="middle">DC = GPIO31 · CS = GPIO28 · RST = GPIO17</text>
+  <rect class="b-gray" x="40" y="1204" width="314" height="76" rx="10"/>
+  <text class="lbl" x="197" y="1228" text-anchor="middle">GSPI — 100 kHz, mode 0</text>
+  <text class="note" x="197" y="1247" text-anchor="middle">master, 8-bit words, software CS</text>
+  <text class="note" x="197" y="1266" text-anchor="middle">CLK = PIN_05 · MOSI = PIN_07</text>
+  <rect class="b-orange" x="40" y="1320" width="314" height="64" rx="10"/>
+  <text class="lbl" x="197" y="1347" text-anchor="middle">SSD1351 OLED 128×128</text>
+  <text class="note" x="197" y="1366" text-anchor="middle">message row at y = 64</text>
+  <path class="edge" d="M232,1072 V1096" marker-end="url(#ah)"/>
+  <text class="elbl" x="242" y="1089">48 × drawPixel</text>
+  <path class="edge" d="M197,1176 V1200" marker-end="url(#ah)"/>
+  <path class="edge" d="M197,1280 V1316" marker-end="url(#ah)"/>
+  <text class="elbl" x="207" y="1303">SPI bytes: CLK + MOSI</text>
+
+  <!-- ===== Cloud path ===== -->
+  <rect class="group" x="390" y="960" width="586" height="372" rx="12"/>
+  <text class="glbl" x="406" y="982">CLOUD PATH — SimpleLink NWP</text>
+  <rect class="b-planned" x="406" y="1000" width="206" height="76" rx="10"/>
+  <text class="lbl" x="509" y="1024" text-anchor="middle">http_get</text>
+  <text class="note" x="509" y="1043" text-anchor="middle">GET /things/LAB4_AWS/shadow</text>
+  <text class="note" x="509" y="1062" text-anchor="middle">http_post's twin, never called</text>
+  <rect class="b-purple" x="406" y="1128" width="240" height="76" rx="10"/>
+  <text class="lbl" x="526" y="1152" text-anchor="middle">jsonify</text>
+  <text class="note" x="526" y="1171" text-anchor="middle">msg → state.desired.default</text>
+  <text class="note" x="526" y="1190" text-anchor="middle">into json_msg[256]</text>
+  <rect class="b-purple" x="406" y="1228" width="240" height="76" rx="10"/>
+  <text class="lbl" x="526" y="1252" text-anchor="middle">http_post</text>
+  <text class="note" x="526" y="1271" text-anchor="middle">POST /things/LAB4_AWS/shadow</text>
+  <text class="note" x="526" y="1290" text-anchor="middle">reply printed to the UART console</text>
+  <path class="edge" d="M526,1204 V1224" marker-end="url(#ah)"/>
+
+  <rect class="group" x="690" y="994" width="276" height="324" rx="12"/>
+  <text class="glbl" x="704" y="1016">AT BOOT, BEFORE while(1)</text>
+  <rect class="b-purple" x="702" y="1028" width="252" height="76" rx="10"/>
+  <text class="lbl" x="828" y="1052" text-anchor="middle">Wi-Fi join</text>
+  <text class="note" x="828" y="1071" text-anchor="middle">network_utils: connectToAccessPoint</text>
+  <text class="note" x="828" y="1090" text-anchor="middle">SSID + key from the SDK's common.h</text>
+  <rect class="b-purple" x="702" y="1128" width="252" height="76" rx="10"/>
+  <text class="lbl" x="828" y="1152" text-anchor="middle">set_time</text>
+  <text class="note" x="828" y="1171" text-anchor="middle">device date from #define macros</text>
+  <text class="note" x="828" y="1190" text-anchor="middle">set so encryption can be used</text>
+  <rect class="b-purple" x="702" y="1228" width="252" height="76" rx="10"/>
+  <text class="lbl" x="828" y="1252" text-anchor="middle">tls_connect</text>
+  <text class="note" x="828" y="1271" text-anchor="middle">TLS 1.2 · /cert/*.der on serial flash</text>
+  <text class="note" x="828" y="1290" text-anchor="middle">ECDHE-RSA-AES128-CBC-SHA256</text>
+  <path class="edge" d="M828,1104 V1124" marker-end="url(#ah)"/>
+  <path class="edge" d="M828,1204 V1224" marker-end="url(#ah)"/>
+  <path class="edge" d="M702,1266 H650" marker-end="url(#ah)"/>
+  <text class="elbl" x="668" y="1258" text-anchor="middle">socket</text>
+
+  <!-- ===== AWS ===== -->
+  <rect class="b-orange" x="702" y="1380" width="252" height="76" rx="10"/>
+  <text class="lbl" x="828" y="1404" text-anchor="middle">AWS IoT device shadow</text>
+  <text class="note" x="828" y="1423" text-anchor="middle">thing LAB4_AWS · 52.25.173.10:8443</text>
+  <text class="note" x="828" y="1442" text-anchor="middle">state.desired.default = message</text>
+  <path class="edge" d="M828,1304 V1376" marker-end="url(#ah)"/>
+  <text class="elbl" x="818" y="1361" text-anchor="end">connect + TLS handshake</text>
+  <path class="edge" d="M600,1304 V1418 H698" marker-end="url(#ah)"/>
+  <text class="elbl" x="650" y="1410" text-anchor="middle">HTTP POST</text>
+
+  <!-- ===== Legend ===== -->
+  <text class="glbl" x="40" y="1500">LEGEND</text>
+  <rect class="b-orange" x="40" y="1514" width="26" height="14" rx="4"/>
+  <text class="note" x="78" y="1525">hardware and AWS (outside firmware)</text>
+  <rect class="b-green" x="320" y="1514" width="26" height="14" rx="4"/>
+  <text class="note" x="358" y="1525">interrupt handlers</text>
+  <rect class="b-blue" x="520" y="1514" width="26" height="14" rx="4"/>
+  <text class="note" x="558" y="1525">main loop (main.c)</text>
+  <rect class="b-gray" x="740" y="1514" width="26" height="14" rx="4"/>
+  <text class="note" x="778" y="1525">display driver stack</text>
+  <rect class="b-purple" x="40" y="1536" width="26" height="14" rx="4"/>
+  <text class="note" x="78" y="1547">cloud path code</text>
+  <rect class="b-planned" x="320" y="1536" width="26" height="14" rx="4"/>
+  <text class="note" x="358" y="1547">defined, never called</text>
+  <path class="edge" d="M520,1543 H546" marker-end="url(#ah)"/>
+  <text class="note" x="558" y="1547">call / signal / data</text>
+  <path class="edge-dash" d="M40,1565 H66" marker-end="url(#ah)"/>
+  <text class="note" x="78" y="1569">shared state between ISRs and the loop: volatile globals and the SysTick counter</text>
+</svg>

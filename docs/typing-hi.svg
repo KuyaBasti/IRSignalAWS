@@ -1,0 +1,238 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1761" width="1000" height="1761" role="img" aria-label="IR Signal AWS, typing hi end to end, as a sequence diagram. Each GHI press on the IR remote is decoded by the GPIO interrupt (a start mark over 2000 microseconds, then 12 bits) and handed to the main loop through pin_out_intflag and data. The first press since boot commits the empty initial letter, moving the cursor to x = 6, and draws g; a second press within 1500 ms cycles to h in the same cell. After a pause of at least 1500 ms, the next GHI press itself commits h to msg and draws g in the next cell, and two more presses cycle it to h and then i. The MUTE send key, 0xD6F, commits i so msg is hi; jsonify wraps it in a shadow document and http_post sends POST /things/LAB4_AWS/shadow with sl_Send over the TLS 1.2 mutual-auth socket opened at boot on port 8443. The AWS IoT shadow's HTTP response returns through sl_Recv and is printed to UART. Send draws nothing; the next accepted press wipes the row and starts the next message at x = 6.">
+  <style>
+    .bg{fill:#ffffff}
+    .title{fill:#1f2328;font:600 22px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .sub{fill:#59636e;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .lbl{fill:#1f2328;font:600 14px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .note{fill:#59636e;font:12px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .glbl{fill:#59636e;font:600 12px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;letter-spacing:.06em}
+    .elbl{fill:#59636e;font:11px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .edge{stroke:#818b98;stroke-width:1.6;fill:none}
+    .edge-dash{stroke:#818b98;stroke-width:1.6;fill:none;stroke-dasharray:6 4}
+    .arrow{fill:#818b98}
+    .group{fill:none;stroke:#d1d9e0;stroke-width:1.2;stroke-dasharray:4 4}
+    .b-blue{fill:#ddf4ff;stroke:#54aeff;stroke-width:1.5}
+    .b-green{fill:#dafbe1;stroke:#4ac26b;stroke-width:1.5}
+    .b-purple{fill:#fbefff;stroke:#c297ff;stroke-width:1.5}
+    .b-orange{fill:#fff1e5;stroke:#fb8f44;stroke-width:1.5}
+    .b-gray{fill:#f6f8fa;stroke:#d1d9e0;stroke-width:1.5}
+    .b-red{fill:#ffebe9;stroke:#ff8182;stroke-width:1.5}
+    .b-planned{fill:none;stroke:#818b98;stroke-width:1.4;stroke-dasharray:5 4}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .wire{stroke:#59636e;stroke-width:1.4;fill:none}
+    .dot{fill:#59636e}
+    @media (prefers-color-scheme: dark){
+      .bg{fill:#0d1117}
+      .title,.lbl{fill:#e6edf3}
+      .sub,.note,.glbl,.elbl{fill:#9198a1}
+      .edge,.edge-dash{stroke:#9198a1}
+      .arrow{fill:#9198a1}
+      .group{stroke:#3d444d}
+      .b-blue{fill:#0c2d6b;stroke:#4493f8}
+      .b-green{fill:#0f3b1e;stroke:#3fb950}
+      .b-purple{fill:#2e1a4f;stroke:#ab7df8}
+      .b-orange{fill:#3d1f0a;stroke:#f0883e}
+      .b-gray{fill:#151b23;stroke:#3d444d}
+      .b-red{fill:#3c1618;stroke:#f85149}
+      .b-planned{stroke:#9198a1}
+      .wire{stroke:#9198a1}
+      .dot{fill:#9198a1}
+    }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="arrow" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1000" height="1761" rx="12"/>
+  <text class="title" x="32" y="48">IR Signal AWS — typing “hi”, end to end</text>
+  <text class="sub" x="32" y="74">Five GHI presses, then send: each letter is drawn at once but enters msg[] only on the next press.</text>
+  <!-- legend -->
+  <g>
+    <rect class="b-gray" x="32" y="94" width="12" height="12" rx="3"/>
+    <text class="elbl" x="50" y="104">hardware / data</text>
+    <rect class="b-blue" x="154" y="94" width="12" height="12" rx="3"/>
+    <text class="elbl" x="172" y="104">CC3200 code: ISR + main loop</text>
+    <rect class="b-green" x="355" y="94" width="12" height="12" rx="3"/>
+    <text class="elbl" x="373" y="104">display path</text>
+    <rect class="b-purple" x="459" y="94" width="12" height="12" rx="3"/>
+    <text class="elbl" x="477" y="104">network path</text>
+    <rect class="b-orange" x="568" y="94" width="12" height="12" rx="3"/>
+    <text class="elbl" x="586" y="104">note</text>
+    <line class="edge" x1="632" y1="100" x2="662" y2="100" marker-end="url(#ah)"/>
+    <text class="elbl" x="670" y="104">call / signal</text>
+    <line class="edge-dash" x1="751" y1="100" x2="781" y2="100" marker-end="url(#ah)"/>
+    <text class="elbl" x="789" y="104">reply</text>
+  </g>
+  <!-- participants + lifelines -->
+  <g>
+    <line class="group" x1="70" y1="180" x2="70" y2="1741"/>
+    <line class="group" x1="196" y1="180" x2="196" y2="1741"/>
+    <line class="group" x1="330" y1="180" x2="330" y2="1741"/>
+    <line class="group" x1="505" y1="180" x2="505" y2="1741"/>
+    <line class="group" x1="640" y1="180" x2="640" y2="1741"/>
+    <line class="group" x1="770" y1="180" x2="770" y2="1741"/>
+    <line class="group" x1="910" y1="180" x2="910" y2="1741"/>
+    <rect class="b-gray" x="24" y="126" width="92" height="54" rx="10"/>
+    <text class="lbl" x="70" y="149" text-anchor="middle">IR remote</text>
+    <text class="note" x="70" y="167" text-anchor="middle">GHI = 0x3EF</text>
+    <rect class="b-blue" x="135" y="126" width="122" height="54" rx="10"/>
+    <text class="lbl" x="196" y="149" text-anchor="middle">ISR decoder</text>
+    <text class="note" x="196" y="167" text-anchor="middle">GPIOA0 + SysTick</text>
+    <rect class="b-blue" x="269" y="126" width="122" height="54" rx="10"/>
+    <text class="lbl" x="330" y="149" text-anchor="middle">main loop</text>
+    <text class="note" x="330" y="167" text-anchor="middle">multi-tap engine</text>
+    <rect class="b-green" x="441" y="126" width="128" height="54" rx="10"/>
+    <text class="lbl" x="505" y="149" text-anchor="middle">SSD1351 OLED</text>
+    <text class="note" x="505" y="167" text-anchor="middle">row y = 64</text>
+    <rect class="b-gray" x="590" y="126" width="100" height="54" rx="10"/>
+    <text class="lbl" x="640" y="149" text-anchor="middle">msg[50]</text>
+    <text class="note" x="640" y="167" text-anchor="middle">text buffer</text>
+    <rect class="b-purple" x="704" y="126" width="132" height="54" rx="10"/>
+    <text class="lbl" x="770" y="149" text-anchor="middle">SimpleLink NWP</text>
+    <text class="note" x="770" y="167" text-anchor="middle">TLS 1.2 socket</text>
+    <rect class="b-purple" x="844" y="126" width="132" height="54" rx="10"/>
+    <text class="lbl" x="910" y="149" text-anchor="middle">AWS IoT shadow</text>
+    <text class="note" x="910" y="167" text-anchor="middle">thing LAB4_AWS</text>
+  </g>
+  <!-- steps, top to bottom -->
+  <g>
+    <line class="group" x1="302" y1="213" x2="976" y2="213"/>
+    <rect class="b-gray" x="24" y="200" width="278" height="26" rx="8"/>
+    <text class="glbl" x="36" y="217">presses 1–2 · first letter, cycling g → h</text>
+    <line class="edge" x1="82" y1="259" x2="195" y2="259" marker-end="url(#ah)"/>
+    <circle class="b-gray" cx="70" cy="259" r="12"/>
+    <text class="lbl" x="70" y="264" text-anchor="middle">1</text>
+    <text class="note" x="139" y="251" text-anchor="middle">press GHI</text>
+    <rect class="b-orange" x="174" y="285" width="453" height="52" rx="8"/>
+    <circle class="b-blue" cx="196" cy="311.0" r="12"/>
+    <text class="lbl" x="196" y="316" text-anchor="middle">2</text>
+    <text class="note" x="218" y="307">both edges: falling resets SysTick, rising reads the mark width</text>
+    <text class="note" x="218" y="323">13 marks: start &gt; 2000 µs, then 12 bits (mark ≤ 1000 µs → 1) → 0x3EF</text>
+    <line class="edge" x1="208" y1="370" x2="329" y2="370" marker-end="url(#ah)"/>
+    <circle class="b-blue" cx="196" cy="370" r="12"/>
+    <text class="lbl" x="196" y="375" text-anchor="middle">3</text>
+    <text class="elbl mono" x="269" y="362" text-anchor="middle">pin_out_intflag</text>
+    <text class="elbl mono" x="269" y="386" text-anchor="middle">data = 0x3EF</text>
+    <rect class="b-orange" x="308" y="404" width="408" height="52" rx="8"/>
+    <circle class="b-blue" cx="330" cy="430.0" r="12"/>
+    <text class="lbl" x="330" y="435" text-anchor="middle">4</text>
+    <text class="note" x="352" y="426">loop polls the flag · ≥ 200 ms since the last accepted frame</text>
+    <text class="note" x="352" y="442">first press since boot: data ≠ prev_data (−1) → commit branch</text>
+    <line class="edge" x1="342" y1="489" x2="639" y2="489" marker-end="url(#ah)"/>
+    <circle class="b-blue" cx="330" cy="489" r="12"/>
+    <text class="lbl" x="330" y="494" text-anchor="middle">5</text>
+    <text class="note" x="423.5" y="481" text-anchor="middle">commit curr_letter (NUL)</text>
+    <text class="elbl mono" x="572.5" y="481" text-anchor="middle">msg = ""</text>
+    <text class="note" x="423.5" y="505" text-anchor="middle">x += 6 → 6</text>
+    <line class="edge" x1="342" y1="542" x2="504" y2="542" marker-end="url(#ah)"/>
+    <circle class="b-blue" cx="330" cy="542" r="12"/>
+    <text class="lbl" x="330" y="547" text-anchor="middle">6</text>
+    <text class="elbl mono" x="423.5" y="534" text-anchor="middle">drawChar(6, 64, 'g')</text>
+    <text class="note" x="423.5" y="558" text-anchor="middle">48 px over 100 kHz SPI</text>
+    <line class="edge" x1="82" y1="595" x2="195" y2="595" marker-end="url(#ah)"/>
+    <line class="edge" x1="197" y1="595" x2="329" y2="595" marker-end="url(#ah)"/>
+    <circle class="b-gray" cx="70" cy="595" r="12"/>
+    <text class="lbl" x="70" y="600" text-anchor="middle">7</text>
+    <text class="elbl mono" x="139" y="587" text-anchor="middle">0x3EF</text>
+    <text class="note" x="263" y="587" text-anchor="middle">flag + data</text>
+    <rect class="b-orange" x="308" y="621" width="366" height="52" rx="8"/>
+    <circle class="b-blue" cx="330" cy="647.0" r="12"/>
+    <text class="lbl" x="330" y="652" text-anchor="middle">8</text>
+    <text class="note" x="352" y="643">same button, ≥ 200 and &lt; 1500 ms after the last press</text>
+    <text class="note" x="352" y="659">→ no commit; curr_cycle++ → 1 → 'h'</text>
+    <line class="edge" x1="342" y1="706" x2="504" y2="706" marker-end="url(#ah)"/>
+    <circle class="b-blue" cx="330" cy="706" r="12"/>
+    <text class="lbl" x="330" y="711" text-anchor="middle">9</text>
+    <text class="elbl mono" x="423.5" y="698" text-anchor="middle">drawChar(6, 64, 'h')</text>
+    <text class="note" x="423.5" y="722" text-anchor="middle">same cell, repainted</text>
+    <rect class="b-gray" x="24" y="740" width="952" height="32" rx="8"/>
+    <text class="note" x="500" y="761" text-anchor="middle">≥ 1500 ms pause on global_time (SysTick, 40 ms steps) — nothing fires at 1500 ms; the gap is only checked on the next press</text>
+    <line class="group" x1="348" y1="799" x2="976" y2="799"/>
+    <rect class="b-gray" x="24" y="786" width="324" height="26" rx="8"/>
+    <text class="glbl" x="36" y="803">presses 3–5 · second letter, cycling g → h → i</text>
+    <line class="edge" x1="82" y1="845" x2="195" y2="845" marker-end="url(#ah)"/>
+    <line class="edge" x1="197" y1="845" x2="329" y2="845" marker-end="url(#ah)"/>
+    <circle class="b-gray" cx="70" cy="845" r="12"/>
+    <text class="lbl" x="70" y="850" text-anchor="middle">10</text>
+    <text class="elbl mono" x="139" y="837" text-anchor="middle">0x3EF</text>
+    <text class="note" x="263" y="837" text-anchor="middle">flag + data</text>
+    <rect class="b-orange" x="308" y="871" width="433" height="36" rx="8"/>
+    <circle class="b-blue" cx="330" cy="889.0" r="12"/>
+    <text class="lbl" x="330" y="894" text-anchor="middle">11</text>
+    <text class="note" x="352" y="893">same button, but ≥ 1500 ms since the last press → commit branch</text>
+    <line class="edge" x1="342" y1="940" x2="639" y2="940" marker-end="url(#ah)"/>
+    <circle class="b-blue" cx="330" cy="940" r="12"/>
+    <text class="lbl" x="330" y="945" text-anchor="middle">12</text>
+    <text class="note" x="423.5" y="932" text-anchor="middle">commit 'h'</text>
+    <text class="elbl mono" x="572.5" y="932" text-anchor="middle">msg = "h"</text>
+    <text class="note" x="423.5" y="956" text-anchor="middle">x += 6 → 12</text>
+    <line class="edge" x1="342" y1="993" x2="504" y2="993" marker-end="url(#ah)"/>
+    <circle class="b-blue" cx="330" cy="993" r="12"/>
+    <text class="lbl" x="330" y="998" text-anchor="middle">13</text>
+    <text class="elbl mono" x="423.5" y="985" text-anchor="middle">drawChar(12, 64, 'g')</text>
+    <text class="note" x="423.5" y="1009" text-anchor="middle">next cell</text>
+    <line class="edge" x1="82" y1="1046" x2="195" y2="1046" marker-end="url(#ah)"/>
+    <line class="edge" x1="197" y1="1046" x2="329" y2="1046" marker-end="url(#ah)"/>
+    <circle class="b-gray" cx="70" cy="1046" r="12"/>
+    <text class="lbl" x="70" y="1051" text-anchor="middle">14</text>
+    <text class="elbl mono" x="139" y="1038" text-anchor="middle">0x3EF ×2</text>
+    <text class="note" x="263" y="1038" text-anchor="middle">flag + data</text>
+    <text class="note" x="263" y="1062" text-anchor="middle">200–1500 ms apart</text>
+    <line class="edge" x1="342" y1="1099" x2="504" y2="1099" marker-end="url(#ah)"/>
+    <circle class="b-blue" cx="330" cy="1099" r="12"/>
+    <text class="lbl" x="330" y="1104" text-anchor="middle">15</text>
+    <text class="elbl mono" x="423.5" y="1091" text-anchor="middle">drawChar(12, 64, 'h')</text>
+    <text class="note" x="423.5" y="1115" text-anchor="middle">then 'i', same cell</text>
+    <line class="group" x1="142" y1="1146" x2="976" y2="1146"/>
+    <rect class="b-gray" x="24" y="1133" width="118" height="26" rx="8"/>
+    <text class="glbl" x="36" y="1150">press 6 · send</text>
+    <line class="edge" x1="82" y1="1192" x2="195" y2="1192" marker-end="url(#ah)"/>
+    <line class="edge" x1="197" y1="1192" x2="329" y2="1192" marker-end="url(#ah)"/>
+    <circle class="b-gray" cx="70" cy="1192" r="12"/>
+    <text class="lbl" x="70" y="1197" text-anchor="middle">16</text>
+    <text class="elbl mono" x="139" y="1184" text-anchor="middle">0xD6F</text>
+    <text class="note" x="263" y="1184" text-anchor="middle">flag + data</text>
+    <text class="note" x="139" y="1208" text-anchor="middle">MUTE = send</text>
+    <line class="edge" x1="342" y1="1245" x2="639" y2="1245" marker-end="url(#ah)"/>
+    <circle class="b-blue" cx="330" cy="1245" r="12"/>
+    <text class="lbl" x="330" y="1250" text-anchor="middle">17</text>
+    <text class="note" x="423.5" y="1237" text-anchor="middle">new button → commit 'i'</text>
+    <text class="elbl mono" x="572.5" y="1237" text-anchor="middle">msg = "hi"</text>
+    <text class="note" x="423.5" y="1261" text-anchor="middle">x += 6 → 18</text>
+    <rect class="b-orange" x="308" y="1287" width="369" height="76" rx="8"/>
+    <circle class="b-blue" cx="330" cy="1325.0" r="12"/>
+    <text class="lbl" x="330" y="1330" text-anchor="middle">18</text>
+    <text class="lbl" x="352" y="1309">case 0xD6F: jsonify(msg), then http_post</text>
+    <text class="note mono" x="352" y="1329">{"state": {"desired" : {"default" : "hi"}}}</text>
+    <text class="note mono" x="352" y="1345">POST /things/LAB4_AWS/shadow HTTP/1.1</text>
+    <line class="edge" x1="342" y1="1396" x2="769" y2="1396" marker-end="url(#ah)"/>
+    <circle class="b-blue" cx="330" cy="1396" r="12"/>
+    <text class="lbl" x="330" y="1401" text-anchor="middle">19</text>
+    <text class="elbl mono" x="423.5" y="1388" text-anchor="middle">sl_Send(request)</text>
+    <text class="note" x="423.5" y="1412" text-anchor="middle">socket open since boot</text>
+    <line class="edge" x1="782" y1="1449" x2="909" y2="1449" marker-end="url(#ah)"/>
+    <circle class="b-purple" cx="770" cy="1449" r="12"/>
+    <text class="lbl" x="770" y="1454" text-anchor="middle">20</text>
+    <text class="note" x="846" y="1441" text-anchor="middle">TLS 1.2, port 8443</text>
+    <text class="note" x="846" y="1465" text-anchor="middle">mutual auth</text>
+    <line class="edge-dash" x1="898" y1="1502" x2="771" y2="1502" marker-end="url(#ah)"/>
+    <circle class="b-purple" cx="910" cy="1502" r="12"/>
+    <text class="lbl" x="910" y="1507" text-anchor="middle">21</text>
+    <text class="note" x="834" y="1494" text-anchor="middle">HTTP response</text>
+    <line class="edge-dash" x1="758" y1="1547" x2="331" y2="1547" marker-end="url(#ah)"/>
+    <circle class="b-purple" cx="770" cy="1547" r="12"/>
+    <text class="lbl" x="770" y="1552" text-anchor="middle">22</text>
+    <text class="elbl mono" x="699" y="1539" text-anchor="middle">sl_Recv</text>
+    <text class="note" x="699" y="1563" text-anchor="middle">printed to UART</text>
+    <rect class="b-orange" x="308" y="1581" width="388" height="52" rx="8"/>
+    <circle class="b-blue" cx="330" cy="1607.0" r="12"/>
+    <text class="lbl" x="330" y="1612" text-anchor="middle">23</text>
+    <text class="note" x="352" y="1603">UtilsDelay(80000) · message_sent = true · curr_cycle = −1</text>
+    <text class="note" x="352" y="1619">send draws nothing — the screen keeps showing “hi”</text>
+    <rect class="b-orange" x="308" y="1647" width="478" height="76" rx="8"/>
+    <text class="lbl" x="322" y="1669">next accepted press after a send</text>
+    <text class="note" x="322" y="1689">fillRect(0, 64, 128, 9) wipes the row · x = 6 · msg = ""</text>
+    <text class="note" x="322" y="1705">prev_data = 0xD6F skips the commit: curr_cycle −1 → 0, first letter of the group</text>
+  </g>
+</svg>
