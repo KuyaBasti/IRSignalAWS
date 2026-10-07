@@ -1,0 +1,196 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1104" width="1000" height="1104" role="img" aria-label="IR Signal AWS, anatomy of one IR frame on the receiver output (idle high, pulled low during each 38 kHz burst, a mark). A frame is 13 marks: a start mark that must be longer than 2000 microseconds, then 12 data marks. The GPIO interrupt fires on both edges: every falling edge restarts SysTick with HWREG(NVIC_ST_CURRENT) = 1 and arms a frame (data = 0) only if reading_data is false; every rising edge inside an open frame measures delta = TICKS_TO_US(3,200,000 minus SysTickValueGet()), the mark width in microseconds. Gaps are never timed. At edge_counter 0 a delta of 2000 microseconds or less aborts the frame; at edge_counter 1 to 12 data is shifted left and a delta of 1000 microseconds or less ORs in a 1, longer marks give 0. After the 13th mark edge_counter reaches 13 in the same call: pin_out_intflag = 1, reading_data = false, edge_counter = 0. Example: button 4 decodes to data = 0x3EF = 0011 1110 1111, which main.c maps to GHI.">
+  <style>
+    .bg{fill:#ffffff}
+    .title{fill:#1f2328;font:600 22px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .sub{fill:#59636e;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .lbl{fill:#1f2328;font:600 14px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .note{fill:#59636e;font:12px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .glbl{fill:#59636e;font:600 12px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;letter-spacing:.06em}
+    .elbl{fill:#59636e;font:11px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .edge{stroke:#818b98;stroke-width:1.6;fill:none}
+    .edge-dash{stroke:#818b98;stroke-width:1.6;fill:none;stroke-dasharray:6 4}
+    .arrow{fill:#818b98}
+    .group{fill:none;stroke:#d1d9e0;stroke-width:1.2;stroke-dasharray:4 4}
+    .b-blue{fill:#ddf4ff;stroke:#54aeff;stroke-width:1.5}
+    .b-green{fill:#dafbe1;stroke:#4ac26b;stroke-width:1.5}
+    .b-purple{fill:#fbefff;stroke:#c297ff;stroke-width:1.5}
+    .b-orange{fill:#fff1e5;stroke:#fb8f44;stroke-width:1.5}
+    .b-gray{fill:#f6f8fa;stroke:#d1d9e0;stroke-width:1.5}
+    .b-red{fill:#ffebe9;stroke:#ff8182;stroke-width:1.5}
+    .b-planned{fill:none;stroke:#818b98;stroke-width:1.4;stroke-dasharray:5 4}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .wire{stroke:#59636e;stroke-width:1.4;fill:none}
+    .dot{fill:#59636e}
+    @media (prefers-color-scheme: dark){
+      .bg{fill:#0d1117}
+      .title,.lbl{fill:#e6edf3}
+      .sub,.note,.glbl,.elbl{fill:#9198a1}
+      .edge,.edge-dash{stroke:#9198a1}
+      .arrow{fill:#9198a1}
+      .group{stroke:#3d444d}
+      .b-blue{fill:#0c2d6b;stroke:#4493f8}
+      .b-green{fill:#0f3b1e;stroke:#3fb950}
+      .b-purple{fill:#2e1a4f;stroke:#ab7df8}
+      .b-orange{fill:#3d1f0a;stroke:#f0883e}
+      .b-gray{fill:#151b23;stroke:#3d444d}
+      .b-red{fill:#3c1618;stroke:#f85149}
+      .b-planned{stroke:#9198a1}
+      .wire{stroke:#9198a1}
+      .dot{fill:#9198a1}
+    }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="arrow" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1000" height="1104" rx="12"/>
+  <text class="title" x="32" y="48">IR Signal AWS — anatomy of an IR frame</text>
+  <text class="sub" x="32" y="74">The receiver output idles high and each 38 kHz burst pulls it low (a mark). Only the marks are timed.</text>
+  <rect class="group" x="24" y="96" width="952" height="352" rx="12"/>
+  <text class="glbl" x="40" y="120">ONE FRAME ON THE RECEIVER OUTPUT — BUTTON 4 (GHI)</text>
+  <rect class="b-orange" x="520" y="110" width="14" height="11" rx="2"/>
+  <text class="elbl" x="540" y="120">start mark</text>
+  <rect class="b-blue" x="621" y="110" width="14" height="11" rx="2"/>
+  <text class="elbl" x="641" y="120">bit 0 · long mark</text>
+  <rect class="b-green" x="763" y="110" width="14" height="11" rx="2"/>
+  <text class="elbl" x="783" y="120">bit 1 · short mark</text>
+  <rect class="b-red" x="911" y="110" width="14" height="11" rx="2"/>
+  <text class="elbl" x="931" y="120">abort</text>
+  <text class="elbl mono" x="40" y="196">edge_counter</text>
+  <text class="elbl" x="40" y="218">high = idle</text>
+  <text class="elbl" x="40" y="256">low = mark</text>
+  <text class="elbl" x="40" y="278">bit read</text>
+  <text class="elbl" x="40" y="304">lands in</text>
+  <text class="elbl mono" x="204" y="196" text-anchor="middle">0</text>
+  <rect class="b-orange" x="144" y="262" width="120" height="24" rx="3"/>
+  <text class="note" x="204" y="279" text-anchor="middle">start &gt; 2000 µs</text>
+  <text class="elbl" x="204" y="304" text-anchor="middle">not stored</text>
+  <text class="elbl mono" x="309" y="196" text-anchor="middle">1</text>
+  <rect class="b-blue" x="284" y="262" width="50" height="24" rx="3"/>
+  <text class="lbl mono" x="309" y="279" text-anchor="middle">0</text>
+  <text class="elbl mono" x="309" y="304" text-anchor="middle">b11</text>
+  <text class="elbl mono" x="379" y="196" text-anchor="middle">2</text>
+  <rect class="b-blue" x="354" y="262" width="50" height="24" rx="3"/>
+  <text class="lbl mono" x="379" y="279" text-anchor="middle">0</text>
+  <text class="elbl mono" x="379" y="304" text-anchor="middle">b10</text>
+  <text class="elbl mono" x="438" y="196" text-anchor="middle">3</text>
+  <rect class="b-green" x="424" y="262" width="28" height="24" rx="3"/>
+  <text class="lbl mono" x="438" y="279" text-anchor="middle">1</text>
+  <text class="elbl mono" x="438" y="304" text-anchor="middle">b9</text>
+  <text class="elbl mono" x="486" y="196" text-anchor="middle">4</text>
+  <rect class="b-green" x="472" y="262" width="28" height="24" rx="3"/>
+  <text class="lbl mono" x="486" y="279" text-anchor="middle">1</text>
+  <text class="elbl mono" x="486" y="304" text-anchor="middle">b8</text>
+  <text class="elbl mono" x="534" y="196" text-anchor="middle">5</text>
+  <rect class="b-green" x="520" y="262" width="28" height="24" rx="3"/>
+  <text class="lbl mono" x="534" y="279" text-anchor="middle">1</text>
+  <text class="elbl mono" x="534" y="304" text-anchor="middle">b7</text>
+  <text class="elbl mono" x="582" y="196" text-anchor="middle">6</text>
+  <rect class="b-green" x="568" y="262" width="28" height="24" rx="3"/>
+  <text class="lbl mono" x="582" y="279" text-anchor="middle">1</text>
+  <text class="elbl mono" x="582" y="304" text-anchor="middle">b6</text>
+  <text class="elbl mono" x="630" y="196" text-anchor="middle">7</text>
+  <rect class="b-green" x="616" y="262" width="28" height="24" rx="3"/>
+  <text class="lbl mono" x="630" y="279" text-anchor="middle">1</text>
+  <text class="elbl mono" x="630" y="304" text-anchor="middle">b5</text>
+  <text class="elbl mono" x="689" y="196" text-anchor="middle">8</text>
+  <rect class="b-blue" x="664" y="262" width="50" height="24" rx="3"/>
+  <text class="lbl mono" x="689" y="279" text-anchor="middle">0</text>
+  <text class="elbl mono" x="689" y="304" text-anchor="middle">b4</text>
+  <text class="elbl mono" x="748" y="196" text-anchor="middle">9</text>
+  <rect class="b-green" x="734" y="262" width="28" height="24" rx="3"/>
+  <text class="lbl mono" x="748" y="279" text-anchor="middle">1</text>
+  <text class="elbl mono" x="748" y="304" text-anchor="middle">b3</text>
+  <text class="elbl mono" x="796" y="196" text-anchor="middle">10</text>
+  <rect class="b-green" x="782" y="262" width="28" height="24" rx="3"/>
+  <text class="lbl mono" x="796" y="279" text-anchor="middle">1</text>
+  <text class="elbl mono" x="796" y="304" text-anchor="middle">b2</text>
+  <text class="elbl mono" x="844" y="196" text-anchor="middle">11</text>
+  <rect class="b-green" x="830" y="262" width="28" height="24" rx="3"/>
+  <text class="lbl mono" x="844" y="279" text-anchor="middle">1</text>
+  <text class="elbl mono" x="844" y="304" text-anchor="middle">b1</text>
+  <text class="elbl mono" x="892" y="196" text-anchor="middle">12</text>
+  <rect class="b-green" x="878" y="262" width="28" height="24" rx="3"/>
+  <text class="lbl mono" x="892" y="279" text-anchor="middle">1</text>
+  <text class="elbl mono" x="892" y="304" text-anchor="middle">b0</text>
+  <path class="wire" d="M124,214 H144 V252 H264 V214 H284 V252 H334 V214 H354 V252 H404 V214 H424 V252 H452 V214 H472 V252 H500 V214 H520 V252 H548 V214 H568 V252 H596 V214 H616 V252 H644 V214 H664 V252 H714 V214 H734 V252 H762 V214 H782 V252 H810 V214 H830 V252 H858 V214 H878 V252 H906 V214 H950"/>
+  <line class="wire" x1="144" y1="171" x2="144" y2="210"/>
+  <circle class="dot" cx="144" cy="214" r="3"/>
+  <text class="elbl" x="138" y="166">1st falling edge: frame armed</text>
+  <line class="wire" x1="414" y1="171" x2="414" y2="210"/>
+  <text class="elbl" x="414" y="166" text-anchor="middle">gap: never timed</text>
+  <line class="wire" x1="906" y1="171" x2="906" y2="210"/>
+  <circle class="dot" cx="906" cy="214" r="3"/>
+  <text class="elbl" x="936" y="166" text-anchor="end">13th rising edge: frame complete</text>
+  <path class="wire" d="M284,314 V321 H500 V314"/>
+  <text class="note mono" x="392" y="340" text-anchor="middle">0011 → 3</text>
+  <path class="wire" d="M520,314 V321 H714 V314"/>
+  <text class="note mono" x="617" y="340" text-anchor="middle">1110 → E</text>
+  <path class="wire" d="M734,314 V321 H906 V314"/>
+  <text class="note mono" x="820" y="340" text-anchor="middle">1111 → F</text>
+  <rect class="b-gray" x="376" y="356" width="480" height="74" rx="10"/>
+  <text class="lbl mono" x="616" y="380" text-anchor="middle">data = 0x3EF = 0011 1110 1111</text>
+  <text class="note" x="616" y="400" text-anchor="middle">zeroed when armed; <tspan class="mono">data &lt;&lt;= 1</tspan> per data mark, so the first lands in bit 11</text>
+  <text class="note" x="616" y="418" text-anchor="middle">main.c button table: 0x3EF = button 4 → <tspan class="mono">case 0x3EF</tspan>: GHI</text>
+  <text class="elbl" x="40" y="388">widths are schematic:</text>
+  <text class="elbl" x="40" y="404">the code fixes only the</text>
+  <text class="elbl" x="40" y="420">1000 µs and 2000 µs thresholds</text>
+  <rect class="group" x="24" y="468" width="952" height="300" rx="12"/>
+  <text class="glbl" x="40" y="492">ONE MARK, CLOSE UP — THE GPIO INTERRUPT FIRES ON BOTH EDGES</text>
+  <text class="elbl mono" x="960" y="492" text-anchor="end">GPIOA0IntHandler</text>
+  <path class="wire" d="M60,564 H300 V624 H640 V564 H820 V624 H900"/>
+  <text class="note" x="470" y="592" text-anchor="middle">delta = mark width, the only thing timed</text>
+  <line class="edge" x1="302" y1="606" x2="638" y2="606" marker-start="url(#ah)" marker-end="url(#ah)"/>
+  <text class="note" x="730" y="520" text-anchor="middle">gap: never timed</text>
+  <text class="elbl" x="730" y="535" text-anchor="middle">next falling edge restarts SysTick</text>
+  <line class="edge-dash" x1="642" y1="548" x2="818" y2="548" marker-start="url(#ah)" marker-end="url(#ah)"/>
+  <text class="elbl" x="830" y="616">next mark</text>
+  <circle class="dot" cx="300" cy="624" r="3"/>
+  <line class="edge" x1="300" y1="628" x2="300" y2="650" marker-end="url(#ah)"/>
+  <line class="edge" x1="640" y1="628" x2="640" y2="650" marker-end="url(#ah)"/>
+  <circle class="dot" cx="640" cy="624" r="3"/>
+  <rect class="b-gray" x="40" y="652" width="440" height="74" rx="10"/>
+  <text class="lbl" x="56" y="676">Falling edge (pin low): mark starts, stopwatch restarts</text>
+  <text class="note mono" x="56" y="696">HWREG(NVIC_ST_CURRENT) = 1;  systick_cnt = 0;</text>
+  <text class="note" x="56" y="714">on every falling edge, frame or not; arms a frame only if <tspan class="mono">!reading_data</tspan></text>
+  <rect class="b-gray" x="500" y="652" width="460" height="74" rx="10"/>
+  <text class="lbl" x="516" y="676">Rising edge (pin high): mark ends, stopwatch read</text>
+  <text class="note mono" x="516" y="696">delta = TICKS_TO_US(3,200,000 − SysTickValueGet())</text>
+  <text class="note" x="516" y="714">80 MHz ticks since the falling edge ÷ 80 → µs; only while a frame is open</text>
+  <text class="note" x="40" y="752">One SysTick period is 3,200,000 ticks = 40 ms. <tspan class="mono">systick_cnt</tspan> is never read here, so a mark longer than 40 ms would wrap and read short.</text>
+  <rect class="group" x="24" y="788" width="952" height="292" rx="12"/>
+  <text class="glbl" x="40" y="812">WIDTH TO BIT — WHAT THE RISING EDGE DOES WITH delta</text>
+  <text class="lbl mono" x="40" y="849">delta</text>
+  <line class="wire" x1="290" y1="844" x2="944" y2="844" marker-end="url(#ah)"/>
+  <line class="wire" x1="290" y1="839" x2="290" y2="849"/>
+  <text class="elbl mono" x="290" y="834" text-anchor="middle">0</text>
+  <line class="wire" x1="490" y1="839" x2="490" y2="849"/>
+  <text class="elbl mono" x="490" y="834" text-anchor="middle">1000 µs</text>
+  <line class="wire" x1="690" y1="839" x2="690" y2="849"/>
+  <text class="elbl mono" x="690" y="834" text-anchor="middle">2000 µs</text>
+  <text class="elbl" x="944" y="834" text-anchor="end">mark width →</text>
+  <text class="lbl mono" x="40" y="880">edge_counter 0</text>
+  <text class="note" x="40" y="898">the start mark</text>
+  <rect class="b-red" x="290" y="860" width="400" height="48" rx="6"/>
+  <text class="lbl" x="490" y="880" text-anchor="middle">abort: delta ≤ 2000 µs</text>
+  <text class="note" x="490" y="898" text-anchor="middle"><tspan class="mono">reading_data = false;  edge_counter = 0;  return;</tspan></text>
+  <rect class="b-orange" x="690" y="860" width="240" height="48" rx="6"/>
+  <text class="lbl" x="810" y="880" text-anchor="middle">start OK: &gt; 2000 µs</text>
+  <text class="note" x="810" y="898" text-anchor="middle"><tspan class="mono">edge_counter++</tspan></text>
+  <text class="lbl mono" x="40" y="940">edge_counter 1…12</text>
+  <text class="note" x="40" y="958">data marks: <tspan class="mono">data &lt;&lt;= 1</tspan> first</text>
+  <rect class="b-green" x="290" y="920" width="200" height="48" rx="6"/>
+  <text class="lbl" x="390" y="940" text-anchor="middle">bit 1: ≤ 1000 µs</text>
+  <text class="note" x="390" y="958" text-anchor="middle"><tspan class="mono">data |= 1</tspan></text>
+  <rect class="b-blue" x="490" y="920" width="440" height="48" rx="6"/>
+  <text class="lbl" x="710" y="940" text-anchor="middle">bit 0: &gt; 1000 µs</text>
+  <text class="note" x="710" y="958" text-anchor="middle">nothing ORed in, even for a mark past 2000 µs</text>
+  <text class="lbl mono" x="40" y="1012">edge_counter 13</text>
+  <text class="note" x="40" y="1030"><tspan class="mono">edge_counter++</tspan> after every</text>
+  <text class="note" x="40" y="1046">accepted mark: 13 marks → 13</text>
+  <rect class="b-gray" x="290" y="988" width="640" height="74" rx="10"/>
+  <text class="lbl" x="610" y="1012" text-anchor="middle">Frame complete, inside that same rising-edge call</text>
+  <text class="note mono" x="610" y="1032" text-anchor="middle">pin_out_intflag = 1;  reading_data = false;  edge_counter = 0;</text>
+  <text class="note" x="610" y="1050" text-anchor="middle">the main loop polls <tspan class="mono">pin_out_intflag</tspan> and reads the 12-bit <tspan class="mono">data</tspan></text>
+</svg>

@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 536" width="1000" height="536" role="img" aria-label="IR Signal AWS system overview: an IR remote's 12-bit button codes reach a CC3200 LaunchPad through an IR receiver on PIN_58, where a SysTick-timed decoder ISR hands each code to a main-loop multi-tap engine. The engine draws characters on a 128x128 SSD1351 OLED over 100 kHz SPI and, on the send key, passes the message to a shadow HTTP client (jsonify plus http_post). The client talks to the SimpleLink network processor with sl_Send and sl_Recv; the network processor, loaded with a root CA, client certificate and private key from serial flash, holds a TLS 1.2 link on port 8443 to the AWS IoT shadow at /things/LAB4_AWS/shadow. The HTTP request and the AWS reply are printed to a UART0 console.">
+  <style>
+    .bg{fill:#ffffff}
+    .title{fill:#1f2328;font:600 22px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .sub{fill:#59636e;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .lbl{fill:#1f2328;font:600 14px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .note{fill:#59636e;font:12px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .glbl{fill:#59636e;font:600 12px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;letter-spacing:.06em}
+    .elbl{fill:#59636e;font:11px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .edge{stroke:#818b98;stroke-width:1.6;fill:none}
+    .edge-dash{stroke:#818b98;stroke-width:1.6;fill:none;stroke-dasharray:6 4}
+    .arrow{fill:#818b98}
+    .group{fill:none;stroke:#d1d9e0;stroke-width:1.2;stroke-dasharray:4 4}
+    .b-blue{fill:#ddf4ff;stroke:#54aeff;stroke-width:1.5}
+    .b-green{fill:#dafbe1;stroke:#4ac26b;stroke-width:1.5}
+    .b-purple{fill:#fbefff;stroke:#c297ff;stroke-width:1.5}
+    .b-orange{fill:#fff1e5;stroke:#fb8f44;stroke-width:1.5}
+    .b-gray{fill:#f6f8fa;stroke:#d1d9e0;stroke-width:1.5}
+    @media (prefers-color-scheme: dark){
+      .bg{fill:#0d1117}
+      .title,.lbl{fill:#e6edf3}
+      .sub,.note,.glbl,.elbl{fill:#9198a1}
+      .edge,.edge-dash{stroke:#9198a1}
+      .arrow{fill:#9198a1}
+      .group{stroke:#3d444d}
+      .b-blue{fill:#0c2d6b;stroke:#4493f8}
+      .b-green{fill:#0f3b1e;stroke:#3fb950}
+      .b-purple{fill:#2e1a4f;stroke:#ab7df8}
+      .b-orange{fill:#3d1f0a;stroke:#f0883e}
+      .b-gray{fill:#151b23;stroke:#3d444d}
+    }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="arrow" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1000" height="536" rx="12"/>
+  <text class="title" x="32" y="48">IR Signal AWS — system overview</text>
+  <text class="sub" x="32" y="74">IR keypresses become multi-tap text on the OLED; the send key posts it to an AWS IoT shadow over TLS 1.2.</text>
+
+  <!-- ===== External parts wired to the board (left column) ===== -->
+  <rect class="b-orange" x="24" y="96" width="146" height="56" rx="10"/>
+  <text class="lbl" x="97" y="120" text-anchor="middle">IR remote</text>
+  <text class="note" x="97" y="139" text-anchor="middle">12-bit button codes</text>
+
+  <path class="edge" d="M97,152 V202" marker-end="url(#ah)"/>
+  <text class="elbl" x="107" y="181">infrared</text>
+
+  <rect class="b-orange" x="24" y="204" width="146" height="60" rx="10"/>
+  <text class="lbl" x="97" y="230" text-anchor="middle">IR receiver</text>
+  <text class="note" x="97" y="249" text-anchor="middle">38 kHz, demodulated</text>
+
+  <rect class="b-orange" x="24" y="316" width="146" height="60" rx="10"/>
+  <text class="lbl" x="97" y="342" text-anchor="middle">SSD1351 OLED</text>
+  <text class="note" x="97" y="361" text-anchor="middle">128×128, row y=64</text>
+
+  <!-- ===== CC3200 LaunchPad ===== -->
+  <rect class="group" x="186" y="168" width="540" height="344" rx="12"/>
+  <text class="glbl" x="202" y="190">CC3200 LAUNCHPAD</text>
+
+  <rect class="b-green" x="262" y="204" width="180" height="60" rx="10"/>
+  <text class="lbl" x="352" y="230" text-anchor="middle">IR decoder ISR</text>
+  <text class="note" x="352" y="249" text-anchor="middle">mark widths via SysTick</text>
+
+  <rect class="b-green" x="520" y="204" width="184" height="60" rx="10"/>
+  <text class="lbl" x="612" y="230" text-anchor="middle">Multi-tap engine</text>
+  <text class="note" x="612" y="249" text-anchor="middle">main loop, builds msg[50]</text>
+
+  <rect class="b-green" x="262" y="316" width="180" height="60" rx="10"/>
+  <text class="lbl" x="352" y="342" text-anchor="middle">OLED driver</text>
+  <text class="note" x="352" y="361" text-anchor="middle">Adafruit GFX, drawChar</text>
+
+  <rect class="b-green" x="520" y="316" width="184" height="60" rx="10"/>
+  <text class="lbl" x="612" y="342" text-anchor="middle">Shadow HTTP client</text>
+  <text class="note" x="612" y="361" text-anchor="middle">jsonify + http_post</text>
+
+  <rect class="b-gray" x="262" y="428" width="180" height="60" rx="10"/>
+  <text class="lbl" x="352" y="454" text-anchor="middle">Serial flash</text>
+  <text class="note" x="352" y="473" text-anchor="middle">rootCA, client cert, key</text>
+
+  <rect class="b-blue" x="520" y="428" width="184" height="60" rx="10"/>
+  <text class="lbl" x="612" y="454" text-anchor="middle">Network processor</text>
+  <text class="note" x="612" y="473" text-anchor="middle">SimpleLink Wi-Fi + TLS</text>
+
+  <!-- input path -->
+  <path class="edge" d="M170,234 H260" marker-end="url(#ah)"/>
+  <text class="elbl" x="224" y="226" text-anchor="middle">PIN_58</text>
+  <text class="elbl" x="224" y="250" text-anchor="middle">both edges</text>
+
+  <path class="edge" d="M442,234 H518" marker-end="url(#ah)"/>
+  <text class="elbl" x="481" y="226" text-anchor="middle">12-bit code</text>
+
+  <!-- display path -->
+  <path class="edge" d="M540,264 V290 H352 V314" marker-end="url(#ah)"/>
+  <text class="elbl" x="481" y="283" text-anchor="middle">characters</text>
+
+  <path class="edge" d="M262,346 H172" marker-end="url(#ah)"/>
+  <text class="elbl" x="224" y="338" text-anchor="middle">SPI</text>
+  <text class="elbl" x="224" y="362" text-anchor="middle">100 kHz</text>
+
+  <!-- cloud path -->
+  <path class="edge" d="M612,264 V314" marker-end="url(#ah)"/>
+  <text class="elbl" x="622" y="293">msg on send key</text>
+
+  <path class="edge" d="M612,378 V426" marker-start="url(#ah)" marker-end="url(#ah)"/>
+  <text class="elbl" x="622" y="406">sl_Send / sl_Recv</text>
+
+  <path class="edge" d="M442,458 H518" marker-end="url(#ah)"/>
+  <text class="elbl" x="481" y="450" text-anchor="middle">3 cert files</text>
+
+  <!-- ===== Off-board (right column) ===== -->
+  <path class="edge" d="M704,346 H794" marker-end="url(#ah)"/>
+  <text class="elbl" x="761" y="338" text-anchor="middle">UART0</text>
+
+  <rect class="b-orange" x="796" y="316" width="180" height="60" rx="10"/>
+  <text class="lbl" x="886" y="342" text-anchor="middle">UART console</text>
+  <text class="note" x="886" y="361" text-anchor="middle">request + AWS reply</text>
+
+  <path class="edge" d="M706,458 H794" marker-start="url(#ah)" marker-end="url(#ah)"/>
+  <text class="elbl" x="761" y="450" text-anchor="middle">TLS 1.2</text>
+  <text class="elbl" x="761" y="474" text-anchor="middle">port 8443</text>
+
+  <rect class="b-purple" x="796" y="428" width="180" height="60" rx="10"/>
+  <text class="lbl" x="886" y="454" text-anchor="middle">AWS IoT shadow</text>
+  <text class="note" x="886" y="473" text-anchor="middle">/things/LAB4_AWS/shadow</text>
+
+  <!-- tiny legend: what each colour is -->
+  <rect class="b-orange" x="796" y="206" width="14" height="10" rx="2"/>
+  <text class="note" x="816" y="215">external hardware</text>
+  <rect class="b-green" x="796" y="226" width="14" height="10" rx="2"/>
+  <text class="note" x="816" y="235">firmware module</text>
+  <rect class="b-blue" x="796" y="246" width="14" height="10" rx="2"/>
+  <text class="note" x="816" y="255">network processor</text>
+  <rect class="b-gray" x="796" y="266" width="14" height="10" rx="2"/>
+  <text class="note" x="816" y="275">files on serial flash</text>
+  <rect class="b-purple" x="796" y="286" width="14" height="10" rx="2"/>
+  <text class="note" x="816" y="295">AWS cloud</text>
+</svg>

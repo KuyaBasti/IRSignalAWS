@@ -1,103 +1,177 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" width="720" font-family="Helvetica, Arial, sans-serif">
-  <rect x="0" y="0" width="720" height="520" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 672" width="1000" height="672" role="img" aria-label="IR Signal AWS wiring: one CC3200 LaunchPad. UART0 USB console TX to PIN_55 (UART0_TX) and RX to PIN_57 (UART0_RX). IR receiver (38 kHz) OUT to PIN_58 (GPIO3), VCC through a series resistor R to 3V3 with a capacitor C from the receiver's VCC node to GND, GND to GND. On-board LEDs: PIN_64 to RED (GPIO9), PIN_02 to GREEN (GPIO11). SSD1351 OLED: VCC to 3V3, GND to GND, SCLK to PIN_05 (GSPI_CLK), DIN to PIN_07 (GSPI_MOSI), CS to PIN_18 (GPIO28), DC to PIN_45 (GPIO31), RST to PIN_08 (GPIO17). PIN_06 (muxed as GSPI_MISO) and PIN_50 (muxed as GSPI_CS) are not connected.">
+  <style>
+    .bg{fill:#ffffff}
+    .title{fill:#1f2328;font:600 22px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .sub{fill:#59636e;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .lbl{fill:#1f2328;font:600 14px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .note{fill:#59636e;font:12px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .glbl{fill:#59636e;font:600 12px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;letter-spacing:.06em}
+    .elbl{fill:#59636e;font:11px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .edge{stroke:#818b98;stroke-width:1.6;fill:none}
+    .edge-dash{stroke:#818b98;stroke-width:1.6;fill:none;stroke-dasharray:6 4}
+    .arrow{fill:#818b98}
+    .group{fill:none;stroke:#d1d9e0;stroke-width:1.2;stroke-dasharray:4 4}
+    .b-blue{fill:#ddf4ff;stroke:#54aeff;stroke-width:1.5}
+    .b-green{fill:#dafbe1;stroke:#4ac26b;stroke-width:1.5}
+    .b-purple{fill:#fbefff;stroke:#c297ff;stroke-width:1.5}
+    .b-orange{fill:#fff1e5;stroke:#fb8f44;stroke-width:1.5}
+    .b-gray{fill:#f6f8fa;stroke:#d1d9e0;stroke-width:1.5}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .wire{stroke:#59636e;stroke-width:1.4;fill:none}
+    .dot{fill:#59636e}
+    @media (prefers-color-scheme: dark){
+      .bg{fill:#0d1117}
+      .title,.lbl{fill:#e6edf3}
+      .sub,.note,.glbl,.elbl{fill:#9198a1}
+      .edge,.edge-dash{stroke:#9198a1}
+      .arrow{fill:#9198a1}
+      .group{stroke:#3d444d}
+      .b-blue{fill:#0c2d6b;stroke:#4493f8}
+      .b-green{fill:#0f3b1e;stroke:#3fb950}
+      .b-purple{fill:#2e1a4f;stroke:#ab7df8}
+      .b-orange{fill:#3d1f0a;stroke:#f0883e}
+      .b-gray{fill:#151b23;stroke:#3d444d}
+      .wire{stroke:#9198a1}
+      .dot{fill:#9198a1}
+    }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="arrow" d="M0,0 L10,5 L0,10 z"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1000" height="672" rx="12"/>
+  <text class="title" x="32" y="48">IR Signal AWS — wiring</text>
+  <text class="sub" x="32" y="74">One CC3200 LaunchPad: IR receiver on PIN_58, SSD1351 OLED on GSPI + 3 GPIOs, UART0 over USB, on-board LEDs.</text>
 
-  <!-- ============ CC3200 (center) ============ -->
-  <text x="360" y="80" font-size="13" text-anchor="middle" fill="#000">CC3200</text>
-  <rect x="280" y="88" width="160" height="242" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+  <!-- ===== CC3200 (center) ===== -->
+  <rect class="b-blue" x="420" y="128" width="220" height="280" rx="10"/>
+  <text class="lbl" x="530" y="153" text-anchor="middle">CC3200 LaunchPad</text>
   <!-- left column pins -->
-  <text x="288" y="108" font-size="11" fill="#000">PIN_55</text>
-  <text x="288" y="132" font-size="11" fill="#000">PIN_57</text>
-  <text x="288" y="164" font-size="11" fill="#000">PIN_58</text>
-  <text x="288" y="196" font-size="11" fill="#000">3V3</text>
-  <text x="288" y="220" font-size="11" fill="#000">GND</text>
-  <text x="288" y="260" font-size="11" fill="#000">PIN_64</text>
-  <text x="288" y="284" font-size="11" fill="#000">PIN_02</text>
+  <text class="note mono" x="432" y="176">PIN_55</text>
+  <text class="note mono" x="432" y="200">PIN_57</text>
+  <text class="note mono" x="432" y="236">PIN_58</text>
+  <text class="note mono" x="432" y="260">3V3</text>
+  <text class="note mono" x="432" y="284">GND</text>
+  <text class="note mono" x="432" y="320">PIN_64</text>
+  <text class="note mono" x="432" y="344">PIN_02</text>
   <!-- right column pins -->
-  <text x="432" y="108" font-size="11" text-anchor="end" fill="#000">3V3</text>
-  <text x="432" y="132" font-size="11" text-anchor="end" fill="#000">GND</text>
-  <text x="432" y="164" font-size="11" text-anchor="end" fill="#000">PIN_05</text>
-  <text x="432" y="188" font-size="11" text-anchor="end" fill="#000">PIN_07</text>
-  <text x="432" y="212" font-size="11" text-anchor="end" fill="#000">PIN_18</text>
-  <text x="432" y="236" font-size="11" text-anchor="end" fill="#000">PIN_45</text>
-  <text x="432" y="260" font-size="11" text-anchor="end" fill="#000">PIN_08</text>
-  <text x="432" y="292" font-size="11" text-anchor="end" fill="#000">PIN_06 (n.c.)</text>
-  <text x="432" y="316" font-size="11" text-anchor="end" fill="#000">PIN_50 (n.c.)</text>
+  <text class="note mono" x="628" y="176" text-anchor="end">3V3</text>
+  <text class="note mono" x="628" y="200" text-anchor="end">GND</text>
+  <text class="note mono" x="628" y="236" text-anchor="end">PIN_05</text>
+  <text class="note mono" x="628" y="260" text-anchor="end">PIN_07</text>
+  <text class="note mono" x="628" y="284" text-anchor="end">PIN_18</text>
+  <text class="note mono" x="628" y="308" text-anchor="end">PIN_45</text>
+  <text class="note mono" x="628" y="332" text-anchor="end">PIN_08</text>
+  <text class="note mono" x="628" y="368" text-anchor="end">PIN_06 (n.c.)</text>
+  <text class="note mono" x="628" y="392" text-anchor="end">PIN_50 (n.c.)</text>
+  <text class="elbl" x="652" y="368">muxed as <tspan class="mono">GSPI_MISO</tspan></text>
+  <text class="elbl" x="652" y="392">muxed as <tspan class="mono">GSPI_CS</tspan></text>
 
-  <!-- ============ OLED (right) ============ -->
-  <text x="640" y="88" font-size="12" text-anchor="middle" fill="#000">OLED (SSD1351)</text>
-  <rect x="580" y="96" width="120" height="184" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
-  <text x="588" y="116" font-size="11" fill="#000">VCC</text>
-  <text x="588" y="140" font-size="11" fill="#000">GND</text>
-  <text x="588" y="172" font-size="11" fill="#000">SCLK</text>
-  <text x="588" y="196" font-size="11" fill="#000">DIN</text>
-  <text x="588" y="220" font-size="11" fill="#000">CS</text>
-  <text x="588" y="244" font-size="11" fill="#000">DC</text>
-  <text x="588" y="268" font-size="11" fill="#000">RST</text>
-
+  <!-- ===== SSD1351 OLED (right) ===== -->
+  <rect class="b-purple" x="780" y="128" width="190" height="216" rx="10"/>
+  <text class="lbl" x="875" y="153" text-anchor="middle">SSD1351 OLED 128×128</text>
+  <text class="note mono" x="792" y="176">VCC</text>
+  <text class="note mono" x="792" y="200">GND</text>
+  <text class="note mono" x="792" y="236">SCLK</text>
+  <text class="note mono" x="792" y="260">DIN</text>
+  <text class="note mono" x="792" y="284">CS</text>
+  <text class="note mono" x="792" y="308">DC</text>
+  <text class="note mono" x="792" y="332">RST</text>
   <!-- CC3200 -> OLED wires -->
-  <polyline points="440,104 468,104 468,112 580,112" fill="none" stroke="#000" stroke-width="1.2"/>
-  <polyline points="440,128 476,128 476,136 580,136" fill="none" stroke="#000" stroke-width="1.2"/>
-  <polyline points="440,160 484,160 484,168 580,168" fill="none" stroke="#000" stroke-width="1.2"/>
-  <polyline points="440,184 492,184 492,192 580,192" fill="none" stroke="#000" stroke-width="1.2"/>
-  <polyline points="440,208 500,208 500,216 580,216" fill="none" stroke="#000" stroke-width="1.2"/>
-  <polyline points="440,232 508,232 508,240 580,240" fill="none" stroke="#000" stroke-width="1.2"/>
-  <polyline points="440,256 516,256 516,264 580,264" fill="none" stroke="#000" stroke-width="1.2"/>
-  <text x="524" y="108" font-size="10" text-anchor="middle" fill="#000">3V3</text>
-  <text x="528" y="132" font-size="10" text-anchor="middle" fill="#000">GND</text>
-  <text x="532" y="164" font-size="10" text-anchor="middle" fill="#000">GSPI_CLK</text>
-  <text x="536" y="188" font-size="10" text-anchor="middle" fill="#000">GSPI_MOSI</text>
-  <text x="540" y="212" font-size="10" text-anchor="middle" fill="#000">GPIO28</text>
-  <text x="544" y="236" font-size="10" text-anchor="middle" fill="#000">GPIO31</text>
-  <text x="548" y="260" font-size="10" text-anchor="middle" fill="#000">GPIO17</text>
+  <path class="wire" d="M640,172 H780"/>
+  <path class="wire" d="M640,196 H780"/>
+  <path class="wire" d="M640,232 H780"/>
+  <path class="wire" d="M640,256 H780"/>
+  <path class="wire" d="M640,280 H780"/>
+  <path class="wire" d="M640,304 H780"/>
+  <path class="wire" d="M640,328 H780"/>
+  <text class="elbl mono" x="710" y="167" text-anchor="middle">3V3</text>
+  <text class="elbl mono" x="710" y="191" text-anchor="middle">GND</text>
+  <text class="elbl mono" x="710" y="227" text-anchor="middle">GSPI_CLK</text>
+  <text class="elbl mono" x="710" y="251" text-anchor="middle">GSPI_MOSI</text>
+  <text class="elbl mono" x="710" y="275" text-anchor="middle">GPIO28</text>
+  <text class="elbl mono" x="710" y="299" text-anchor="middle">GPIO31</text>
+  <text class="elbl mono" x="710" y="323" text-anchor="middle">GPIO17</text>
 
-  <!-- ============ UART0 console (upper left) ============ -->
-  <text x="100" y="80" font-size="12" text-anchor="middle" fill="#000">UART0 (USB)</text>
-  <rect x="40" y="88" width="120" height="52" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
-  <text x="152" y="108" font-size="11" text-anchor="end" fill="#000">TX</text>
-  <text x="152" y="132" font-size="11" text-anchor="end" fill="#000">RX</text>
-  <line x1="160" y1="104" x2="280" y2="104" stroke="#000" stroke-width="1.2"/>
-  <line x1="160" y1="128" x2="280" y2="128" stroke="#000" stroke-width="1.2"/>
-  <text x="220" y="99" font-size="10" text-anchor="middle" fill="#000">UART0_TX</text>
-  <text x="220" y="123" font-size="10" text-anchor="middle" fill="#000">UART0_RX</text>
+  <!-- ===== UART0 console (upper left) ===== -->
+  <rect class="b-gray" x="60" y="128" width="200" height="86" rx="10"/>
+  <text class="lbl" x="160" y="153" text-anchor="middle">UART0 — USB console</text>
+  <text class="note mono" x="248" y="176" text-anchor="end">TX</text>
+  <text class="note mono" x="248" y="200" text-anchor="end">RX</text>
+  <path class="wire" d="M260,172 H420"/>
+  <path class="wire" d="M260,196 H420"/>
+  <text class="elbl mono" x="340" y="167" text-anchor="middle">UART0_TX</text>
+  <text class="elbl mono" x="340" y="191" text-anchor="middle">UART0_RX</text>
 
-  <!-- ============ IR receiver (lower left) ============ -->
-  <circle cx="110" cy="333" r="26" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
-  <text x="110" y="394" font-size="12" text-anchor="middle" fill="#000">IR RECEIVER (38 kHz)</text>
-  <!-- incoming light arrows -->
-  <line x1="55" y1="290" x2="78" y2="308" stroke="#000" stroke-width="1"/>
-  <polygon points="80,310 70,306 75,300" fill="#000"/>
-  <line x1="48" y1="305" x2="71" y2="322" stroke="#000" stroke-width="1"/>
-  <polygon points="73,324 63,320 68,314" fill="#000"/>
-  <!-- lead labels -->
-  <text x="142" y="308" font-size="10" fill="#000">OUT</text>
-  <text x="140" y="329" font-size="10" fill="#000">VCC</text>
-  <text x="142" y="366" font-size="10" fill="#000">GND</text>
+  <!-- ===== IR receiver (lower left) ===== -->
+  <rect class="b-orange" x="120" y="300" width="130" height="144" rx="10"/>
+  <text class="lbl" x="185" y="325" text-anchor="middle">IR receiver</text>
+  <text class="note" x="185" y="343" text-anchor="middle">38 kHz</text>
+  <text class="note mono" x="238" y="368" text-anchor="end">OUT</text>
+  <text class="note mono" x="238" y="400" text-anchor="end">VCC</text>
+  <text class="note mono" x="238" y="432" text-anchor="end">GND</text>
+  <!-- receiver window and incoming light -->
+  <circle class="b-orange" cx="116" cy="372" r="9"/>
+  <path class="edge" d="M84,337 L107,357" marker-end="url(#ah)"/>
+  <path class="edge" d="M74,347 L97,367" marker-end="url(#ah)"/>
+  <text class="elbl" x="32" y="406">IR from remote</text>
   <!-- OUT -> PIN_58 -->
-  <polyline points="126,312 225,312 225,160 280,160" fill="none" stroke="#000" stroke-width="1.2"/>
-  <text x="252" y="155" font-size="10" text-anchor="middle" fill="#000">GPIO3</text>
-  <!-- VCC through series resistor -> 3V3 -->
-  <line x1="136" y1="333" x2="175" y2="333" stroke="#000" stroke-width="1.2"/>
-  <polyline points="175,333 178,327 184,339 190,327 196,339 202,327 205,333" fill="none" stroke="#000" stroke-width="1.2"/>
-  <text x="190" y="322" font-size="10" text-anchor="middle" fill="#000">R</text>
-  <polyline points="205,333 248,333 248,192 280,192" fill="none" stroke="#000" stroke-width="1.2"/>
-  <text x="264" y="188" font-size="10" text-anchor="middle" fill="#000">3V3</text>
-  <!-- decoupling cap from VCC node to GND -->
-  <circle cx="160" cy="333" r="2.5" fill="#000"/>
-  <line x1="160" y1="333" x2="160" y2="341" stroke="#000" stroke-width="1.2"/>
-  <line x1="152" y1="341" x2="168" y2="341" stroke="#000" stroke-width="1.5"/>
-  <line x1="152" y1="346" x2="168" y2="346" stroke="#000" stroke-width="1.5"/>
-  <line x1="160" y1="346" x2="160" y2="354" stroke="#000" stroke-width="1.2"/>
-  <circle cx="160" cy="354" r="2.5" fill="#000"/>
-  <text x="173" y="346" font-size="10" fill="#000">C</text>
-  <!-- GND return -->
-  <polyline points="126,354 256,354 256,216 280,216" fill="none" stroke="#000" stroke-width="1.2"/>
-  <text x="268" y="212" font-size="10" text-anchor="middle" fill="#000">GND</text>
+  <path class="wire" d="M250,364 H330 V232 H420"/>
+  <text class="elbl mono" x="412" y="227" text-anchor="end">GPIO3</text>
+  <!-- VCC -> R -> 3V3 -->
+  <path class="wire" d="M250,396 H284"/>
+  <rect class="wire" x="284" y="390" width="28" height="12"/>
+  <text class="elbl" x="298" y="384" text-anchor="middle">R</text>
+  <path class="wire" d="M312,396 H348 V256 H420"/>
+  <text class="elbl mono" x="412" y="251" text-anchor="end">3V3</text>
+  <!-- C from the VCC node to the GND line -->
+  <path class="wire" d="M268,396 V409"/>
+  <path class="wire" d="M260,409 H276"/>
+  <path class="wire" d="M260,414 H276"/>
+  <path class="wire" d="M268,414 V428"/>
+  <circle class="dot" cx="268" cy="396" r="3"/>
+  <circle class="dot" cx="268" cy="428" r="3"/>
+  <text class="elbl" x="282" y="418">C</text>
+  <!-- GND -> GND -->
+  <path class="wire" d="M250,428 H366 V280 H420"/>
+  <text class="elbl mono" x="412" y="275" text-anchor="end">GND</text>
 
-  <!-- ============ On-board LEDs (bottom) ============ -->
-  <text x="375" y="422" font-size="12" text-anchor="middle" fill="#000">LEDs (on-board)</text>
-  <rect x="310" y="430" width="130" height="64" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
-  <text x="318" y="456" font-size="11" fill="#000">GREEN (GPIO11)</text>
-  <text x="318" y="480" font-size="11" fill="#000">RED (GPIO9)</text>
-  <polyline points="280,280 272,280 272,452 310,452" fill="none" stroke="#000" stroke-width="1.2"/>
-  <polyline points="280,256 264,256 264,476 310,476" fill="none" stroke="#000" stroke-width="1.2"/>
+  <!-- ===== On-board LEDs (bottom) ===== -->
+  <rect class="b-gray" x="420" y="440" width="180" height="84" rx="10"/>
+  <text class="lbl" x="510" y="465" text-anchor="middle">On-board LEDs</text>
+  <text class="note mono" x="432" y="488">GREEN (GPIO11)</text>
+  <text class="note mono" x="432" y="512">RED (GPIO9)</text>
+  <path class="wire" d="M420,340 H404 V484 H420"/>
+  <path class="wire" d="M420,316 H388 V508 H420"/>
+
+  <!-- ===== Legend ===== -->
+  <text class="glbl" x="32" y="568">LEGEND</text>
+  <rect class="b-blue" x="32" y="582" width="26" height="14" rx="4"/>
+  <text class="note" x="70" y="593">CC3200 LaunchPad</text>
+  <rect class="b-purple" x="272" y="582" width="26" height="14" rx="4"/>
+  <text class="note" x="310" y="593">SSD1351 OLED display</text>
+  <rect class="b-orange" x="512" y="582" width="26" height="14" rx="4"/>
+  <text class="note" x="550" y="593">sensors / inputs</text>
+  <rect class="b-gray" x="752" y="582" width="26" height="14" rx="4"/>
+  <text class="note" x="790" y="593">console / LEDs</text>
+  <path class="wire" d="M32,612 H58"/>
+  <text class="note" x="70" y="616">wire</text>
+  <path class="wire" d="M272,612 H298"/>
+  <path class="wire" d="M285,605 V619"/>
+  <circle class="dot" cx="285" cy="612" r="3"/>
+  <text class="note" x="310" y="616">dot = wires joined</text>
+  <path class="edge" d="M512,606 L532,618" marker-end="url(#ah)"/>
+  <text class="note" x="550" y="616">IR light (not a wire)</text>
+  <path class="wire" d="M32,640 H38"/>
+  <rect class="wire" x="38" y="635" width="14" height="10"/>
+  <path class="wire" d="M52,640 H58"/>
+  <text class="note" x="70" y="644">resistor (R)</text>
+  <path class="wire" d="M272,640 H283"/>
+  <path class="wire" d="M283,633 V647"/>
+  <path class="wire" d="M288,633 V647"/>
+  <path class="wire" d="M288,640 H298"/>
+  <text class="note" x="310" y="644">capacitor (C)</text>
+  <text class="note mono" x="512" y="644">n.c.</text>
+  <text class="note" x="550" y="644">pin not connected</text>
 </svg>
